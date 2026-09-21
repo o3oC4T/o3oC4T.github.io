@@ -92,6 +92,28 @@ const evidence = ['Co-First Author', 'Jinddabi’s', 'THJCC CTF 2026', 'MntcrlCT
 
     const motion = await setup({ reducedMotion: 'no-preference' });
     await motion.waitForTimeout(4000);
+    // Exercise the real raycast hover, not only keyboard activation/reduced motion.
+    await motion.evaluate(() => {
+      window.captionPhases = [];
+      window.captionObserver = new MutationObserver(records => {
+        for (const record of records) {
+          if (record.attributeName === 'data-phase') window.captionPhases.push(record.target.dataset.phase);
+        }
+      });
+      window.captionObserver.observe(document.querySelector('.box-caption'), { subtree: true, attributes: true });
+    });
+    const hoverPoint = await motion.locator('.box-keyboard button').last().evaluate(element => {
+      const bounds = element.getBoundingClientRect();
+      return { x: bounds.x + bounds.width / 2, y: bounds.y + bounds.height / 2 };
+    });
+    await motion.mouse.move(hoverPoint.x, hoverPoint.y);
+    await motion.waitForFunction(() => window.captionPhases.includes('shuffling'), {}, { timeout: 15000 });
+    await motion.waitForFunction(() => document.querySelector('.caption-title .about-matrix')?.dataset.scrambling === 'idle');
+    assert.equal(await motion.locator('.caption-title .sr-only').textContent(), 'Education');
+    await motion.mouse.move(20, 400);
+    await motion.waitForFunction(() => document.querySelector('.caption-title .sr-only')?.textContent === 'Select a card to explore');
+    await motion.evaluate(() => window.captionObserver.disconnect());
+    console.log('Real pointer hover: caption glyph shuffle, settle and leave passed.');
     await motion.getByRole('button', { name: 'Open Research', exact: true }).focus();
     await motion.keyboard.press('Enter');
     await motion.locator('dialog[open]').waitFor({ timeout: 45000 });

@@ -16,6 +16,10 @@ identification of the rainbow-accent card. Its original camera, geometry,
 materials, lighting, and animation timings are retained. Unused image and font
 references have been removed from retained layout CSS.
 
+The card-caption matrix-text animation is adapted from the reference's
+text component into `docs/caption-scramble.js`, retaining its glyph cadence,
+letter-by-letter reveal, and reduced-motion behavior.
+
 No ownership of the original design or renderer is claimed. Public availability
 does not itself establish a reuse license; this repository does not grant a new
 license to those materials. The original author’s rights and all third-party

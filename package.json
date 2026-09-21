@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "test": "node --test tests/content.test.mjs",
-    "test:browser": "node tests/browser-check.cjs"
+    "test:browser": "node tests/browser-check.cjs",
+    "test:caption": "node tests/caption-check.cjs"
   },
   "devDependencies": { "playwright": "1.63.0" }
 }

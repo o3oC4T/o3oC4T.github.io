@@ -1,4 +1,5 @@
 import { profile, icons, cards, research, ctf, rubiya, team, honors, education } from './content.js';
+import { createCaptionScramble } from './caption-scramble.js?v=20260921-hover';
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -15,6 +16,8 @@ const box = $('.project-box');
 const dialog = $('#portfolio-dialog');
 const about = $('#about-scene');
 const mobile = matchMedia('(max-width: 760px)');
+const captionScramble = createCaptionScramble($('.box-caption'));
+captionScramble.set('01 — 06', 'Select a card to explore', { animate: false });
 let selectCard, disposeScene, opener, dialogKind;
 let fallback = false, finishedLoading = false, pickerIndex = 0;
 
@@ -25,10 +28,10 @@ const state = {
   onHover(index) {
     state.hovered = index;
     const card = cards[index];
-    $('.caption-number').textContent = card ? number(index) : '01 — 06';
-    $('.caption-title').textContent = card ? card.label : 'Select a card to explore';
+    captionScramble.set(card ? number(index) : '01 — 06', card ? card.label : 'Select a card to explore', { animate: Boolean(card) });
     $('.box-caption').classList.toggle('is-hive', card?.accent === 'rainbow');
     $('.box-caption').style.color = card?.accent === 'rainbow' ? 'var(--hive-caption-accent, #c4f568)' : card?.color || '#91a27b';
+    $('.box-caption').style.setProperty('--caption-accent', card?.accent === 'rainbow' ? 'var(--hive-caption-accent, #c4f568)' : card?.color || '#91a27b');
     document.documentElement.style.setProperty('--portfolio-native-cursor', `url(/cursor-${card?.accent === 'rainbow' ? 'lime' : card?.accent || 'lime'}.png) 7 6, auto`);
   },
   onHoverSound() {},
@@ -83,6 +86,7 @@ function sectionContents(id) {
 }
 
 function openDialog(kind, trigger) {
+  captionScramble.finish();
   if (!dialog.open) opener = trigger || document.activeElement;
   dialogKind = kind;
   state.paused = true;
@@ -128,6 +132,7 @@ function aboutContent() {
 }
 
 function setAbout(visible) {
+  if (visible) captionScramble.finish();
   state.about = visible;
   $$('.box-keyboard button').forEach(button => { button.disabled = visible; });
   $('.yc-logo').setAttribute('aria-expanded', String(visible));

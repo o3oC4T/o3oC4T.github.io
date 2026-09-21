@@ -23,6 +23,7 @@
 
 - `docs/content.js`: 프로필, 카드, 연구, 대회·교육 이력의 단일 데이터 원본
 - `docs/app.js`: 화면 렌더링, 접근성, 연락처 복사, 모바일 탐색
+- `docs/caption-scramble.js`: 원본 타이밍의 카드 번호·이름·화살표 글자 스크램블
 - `docs/styles.css`: 개인 콘텐츠 및 반응형 스타일
 - `docs/assets/archive-scene.js`: 개인화한 원본 3D 렌더러
 - `docs/assets/reference-*.css`: 유지한 원본 레이아웃 스타일
@@ -39,6 +40,7 @@ npm test
 npx playwright install chromium
 # 로컬 서버를 실행한 상태에서
 npm run test:browser
+npm run test:caption
 ```
 
 브라우저 검증은 6개 카드의 PC·모바일 열기/닫기, 소개, 이력서 인쇄, 연락처, Discord 복사, 가로 넘침, WebGL 대체 화면, 로딩 오류를 확인합니다. 결과 이미지는 무시되는 `test-results/`에 저장됩니다.
