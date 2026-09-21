@@ -16,6 +16,7 @@ function add(value, parent) {
   try { url = new URL(value.startsWith('_next/') ? '/' + value : value, new URL(parent, origin)); } catch { return; }
   if (url.origin !== origin || !/\.(?:js|css|woff2?|ttf|png|jpe?g|webp|gif|svg|mp4|webm|json|lottie|wasm|pdf)$/i.test(url.pathname)) return;
   const key = url.pathname;
+  if (key.startsWith('/cdn-cgi/')) return;
   if (seen.has(key)) return;
   seen.add(key);
   if (/\.(js|css|woff2?|wasm)$/.test(key)) queue.unshift(key);
