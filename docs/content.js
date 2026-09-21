@@ -1,5 +1,6 @@
 // Personal content from Yeong Choi's supplied Notion portfolio.
 // Unknown dates, placements, abstracts, and links are intentionally omitted.
+import { theme } from './theme.js';
 export const profile = {
   name: '최영',
   englishName: 'Yeong Choi',
@@ -95,10 +96,10 @@ export const education = [
 ];
 
 export const cards = [
-  { id: 'research', label: 'Research', symbol: 'document', accent: 'purple', color: '#c994ff', eyebrow: 'PAPERS & POSTERS', subtitle: '근거를 연결하는 보안 연구.', description: 'WISA 2026 Poster Session의 두 연구와 저자 역할을 소개합니다.', meta: ['WISA 2026', '2 Posters', 'AI × Security'] },
-  { id: 'ctf', label: 'CTF', symbol: 'trophy', accent: 'blue', color: '#8dcaff', eyebrow: 'CAPTURE THE FLAG', subtitle: '문제를 풀고, 한계를 넓히다.', description: '국내외 보안 경진대회에서의 본선 진출과 수상 기록입니다.', meta: ['Competitions', 'Finals', 'Awards'] },
-  { id: 'rubiyalab', label: 'RubiyaLAB', symbol: 'nodes', accent: 'orange', color: '#ffc36e', eyebrow: 'TEAM / MEMBER', subtitle: '함께 풀어낸 기록.', description: 'RubiyaLAB CTF 팀원으로 참여한 대회와 팀의 성적입니다.', meta: ['CTF Team', 'Member', '12 Results'] },
-  { id: 'team-o3o', label: 'Team o3o', symbol: 'flag', accent: 'pink', color: '#ff9aca', eyebrow: 'ACADEMIC TEAM / LEADER', subtitle: '팀과 함께 만드는 다음 단계.', description: '학술팀 Team o3o의 리더로 활동하며 쌓은 대회 기록입니다.', meta: ['Academic Team', 'Leader', '6 Results'] },
-  { id: 'honors', label: 'Honors', symbol: 'medal', accent: 'red', color: '#ff879f', eyebrow: 'RECOGNITION & ACTIVITIES', subtitle: '배움이 성과로 이어지는 순간.', description: '정보보호 영재교육, 보안 경진대회, 해커톤의 수상과 그 밖의 활동입니다.', meta: ['Awards', 'Hackathon', 'Activities'] },
-  { id: 'education', label: 'Education', symbol: 'book', accent: 'rainbow', color: '#c4f568', eyebrow: 'LEARNING / 2018 — PRESENT', subtitle: '호기심에서 시작한 여정.', description: '과학 영재교육에서 인공지능사이버보안 전공까지, 배움의 기록입니다.', meta: ['Korea University', 'AICS', '2026 — Present'] },
+  { id: 'research', label: 'Research', symbol: 'document', accent: 'pink', color: theme.colors.pink, eyebrow: 'PAPERS & POSTERS', subtitle: '근거를 연결하는 보안 연구.', description: 'WISA 2026 Poster Session의 두 연구와 저자 역할을 소개합니다.', meta: ['WISA 2026', '2 Posters', 'AI × Security'] },
+  { id: 'ctf', label: 'CTF', symbol: 'trophy', accent: 'sky', color: theme.colors.sky, eyebrow: 'CAPTURE THE FLAG', subtitle: '문제를 풀고, 한계를 넓히다.', description: '국내외 보안 경진대회에서의 본선 진출과 수상 기록입니다.', meta: ['Competitions', 'Finals', 'Awards'] },
+  { id: 'rubiyalab', label: 'RubiyaLAB', symbol: 'nodes', accent: 'lilac', color: theme.colors.lilac, eyebrow: 'TEAM / MEMBER', subtitle: '함께 풀어낸 기록.', description: 'RubiyaLAB CTF 팀원으로 참여한 대회와 팀의 성적입니다.', meta: ['CTF Team', 'Member', '12 Results'] },
+  { id: 'team-o3o', label: 'Team o3o', symbol: 'flag', accent: 'peach', color: theme.colors.peach, eyebrow: 'ACADEMIC TEAM / LEADER', subtitle: '팀과 함께 만드는 다음 단계.', description: '학술팀 Team o3o의 리더로 활동하며 쌓은 대회 기록입니다.', meta: ['Academic Team', 'Leader', '6 Results'] },
+  { id: 'honors', label: 'Honors', symbol: 'medal', accent: 'mint', color: theme.colors.mint, eyebrow: 'RECOGNITION & ACTIVITIES', subtitle: '배움이 성과로 이어지는 순간.', description: '정보보호 영재교육, 보안 경진대회, 해커톤의 수상과 그 밖의 활동입니다.', meta: ['Awards', 'Hackathon', 'Activities'] },
+  { id: 'education', label: 'Education', symbol: 'book', accent: 'rainbow', color: theme.colors.rainbow, eyebrow: 'LEARNING / 2018 — PRESENT', subtitle: '호기심에서 시작한 여정.', description: '과학 영재교육에서 인공지능사이버보안 전공까지, 배움의 기록입니다.', meta: ['Korea University', 'AICS', '2026 — Present'] },
 ];

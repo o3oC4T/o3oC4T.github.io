@@ -13,7 +13,7 @@ const base = process.argv[2] || 'http://127.0.0.1:4173';
     // Isolate DOM text animation from software WebGL, using the deployed module/CSS.
     await page.route('**/__caption-test', route => route.fulfill({
       contentType: 'text/html',
-      body: `<link rel="stylesheet" href="${base}/assets/reference-layout.css"><link rel="stylesheet" href="${base}/styles.css"><div class="box-caption" aria-live="polite" style="--caption-accent:#c994ff;color:#c994ff;bottom:50%;font-size:32px"><span class="caption-number"></span><span class="caption-title"></span><span class="caption-arrow" aria-hidden="true"></span></div>`,
+      body: `<link rel="stylesheet" href="${base}/assets/reference-layout.css"><link rel="stylesheet" href="${base}/styles.css"><div class="box-caption" aria-live="polite" style="--caption-accent:#ffb3df;color:#ffb3df;bottom:50%;font-size:32px"><span class="caption-number"></span><span class="caption-title"></span><span class="caption-arrow" aria-hidden="true"></span></div>`,
     }));
     await page.goto(base + '/__caption-test');
     await page.evaluate(async base => {
@@ -40,7 +40,7 @@ const base = process.argv[2] || 'http://127.0.0.1:4173';
       assert.deepEqual(first.states, ['active', 'active', 'active']);
       assert.ok(first.phases.includes('shuffling'));
       assert.notEqual(first.pseudoDisplay, 'none');
-      assert.equal(first.accent, 'rgb(201, 148, 255)');
+      assert.equal(first.accent, 'rgb(255, 179, 223)');
       assert.equal(first.text, title);
       await page.clock.runFor(75);
       assert.notEqual((await snapshot()).glyphs, first.glyphs);

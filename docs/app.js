@@ -1,4 +1,5 @@
-import { profile, icons, cards, research, ctf, rubiya, team, honors, education } from './content.js';
+import { profile, icons, cards, research, ctf, rubiya, team, honors, education } from './content.js?v=20260921-pastel';
+import { theme } from './theme.js';
 import { createCaptionScramble } from './caption-scramble.js?v=20260921-hover';
 
 const $ = (selector, root = document) => root.querySelector(selector);
@@ -31,9 +32,10 @@ const state = {
     $('.box-caption').hidden = !card;
     captionScramble.set(card ? number(index) : '', card ? card.label : '', { animate: Boolean(card) });
     $('.box-caption').classList.toggle('is-hive', card?.accent === 'rainbow');
-    $('.box-caption').style.color = card?.accent === 'rainbow' ? 'var(--hive-caption-accent, #c4f568)' : card?.color || '#91a27b';
-    $('.box-caption').style.setProperty('--caption-accent', card?.accent === 'rainbow' ? 'var(--hive-caption-accent, #c4f568)' : card?.color || '#91a27b');
-    document.documentElement.style.setProperty('--portfolio-native-cursor', `url(/cursor-${card?.accent === 'rainbow' ? 'lime' : card?.accent || 'lime'}.png) 7 6, auto`);
+    const accent = card?.accent === 'rainbow' ? `var(--hive-caption-accent, ${theme.accent})` : card?.color || theme.muted;
+    $('.box-caption').style.color = accent;
+    $('.box-caption').style.setProperty('--caption-accent', accent);
+    document.documentElement.style.setProperty('--portfolio-native-cursor', `url(/assets/cursor-${card?.accent || 'pink'}.svg) 5 3, auto`);
   },
   onHoverSound() {},
   onAboutSettled(visible) {
@@ -241,7 +243,7 @@ document.addEventListener('keydown', event => {
 async function initializeScene() {
   try {
     const [{ createProjectBox }, { createProjectTexturePixels }] = await Promise.all([
-      import('./assets/archive-scene.js?v=20260921-dfir'), import('./assets/textures.js'), document.fonts.ready,
+      import('./assets/archive-scene.js?v=20260921-pastel'), import('./assets/textures.js'), document.fonts.ready,
     ]);
     if (fallback) return;
     const image = new Image();

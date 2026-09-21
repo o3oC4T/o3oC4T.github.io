@@ -11,10 +11,14 @@ project media, résumé, social links, and music player are not part of the
 personalized application. New UI code and structured content live separately
 from the retained renderer.
 
-The renderer has been adapted only for the name engraving, card icons, and
-identification of the rainbow-accent card. Its original camera, geometry,
-materials, lighting, and animation timings are retained. Unused image and font
+The renderer has been adapted for the name engraving, card icons, pastel-pink
+lighting, holographic card materials, and pastel accent palette. Its original
+camera, geometry, and animation timings are retained. Unused image and font
 references have been removed from retained layout CSS.
+
+The user-supplied pastel holographic image is used only as a color/style reference,
+not as a redistributed texture. Card surfaces are generated procedurally by
+`docs/assets/pastel-surface.js`; the source image is not served by the site.
 
 The card-caption matrix-text animation is adapted from the reference's
 text component into `docs/caption-scramble.js`, retaining its glyph cadence,

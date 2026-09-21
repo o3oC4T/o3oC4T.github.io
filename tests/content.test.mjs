@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { profile, icons, cards, research, ctf, rubiya, team, honors, education } from '../docs/content.js';
 
-test('six approved archive cards have matching icons and original accent order', () => {
+test('six approved archive cards have matching icons and neon-pastel accents', () => {
   assert.deepEqual(cards.map(card => card.label), ['Research', 'CTF', 'RubiyaLAB', 'Team o3o', 'Honors', 'Education']);
-  assert.deepEqual(cards.map(card => card.accent), ['purple', 'blue', 'orange', 'pink', 'red', 'rainbow']);
+  assert.deepEqual(cards.map(card => card.accent), ['pink', 'sky', 'lilac', 'peach', 'mint', 'rainbow']);
   assert.equal(new Set(cards.map(card => card.id)).size, 6);
   cards.forEach(card => assert.ok(icons[card.symbol]?.length));
 });
