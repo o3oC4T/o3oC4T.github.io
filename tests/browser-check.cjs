@@ -28,6 +28,8 @@ const evidence = ['Co-First Author', 'Jinddabi’s', 'THJCC CTF 2026', 'MntcrlCT
     const desktop = await setup();
     assert.equal(await desktop.locator('.project-box>canvas').count(), 1);
     assert.equal(await desktop.locator('.box-keyboard button').count(), 6);
+    assert.equal(await desktop.locator('.minimal-footer').count(), 0);
+    assert.ok(await desktop.locator('.box-caption').isHidden());
     await desktop.screenshot({ path: 'test-results/desktop.png', timeout: 30000 });
     for (let index = 0; index < names.length; index++) {
       await desktop.getByRole('button', { name: 'Open ' + names[index], exact: true }).focus();
@@ -111,7 +113,7 @@ const evidence = ['Co-First Author', 'Jinddabi’s', 'THJCC CTF 2026', 'MntcrlCT
     await motion.waitForFunction(() => document.querySelector('.caption-title .about-matrix')?.dataset.scrambling === 'idle');
     assert.equal(await motion.locator('.caption-title .sr-only').textContent(), 'Education');
     await motion.mouse.move(20, 400);
-    await motion.waitForFunction(() => document.querySelector('.caption-title .sr-only')?.textContent === 'Select a card to explore');
+    await motion.waitForFunction(() => document.querySelector('.box-caption').hidden);
     await motion.evaluate(() => window.captionObserver.disconnect());
     console.log('Real pointer hover: caption glyph shuffle, settle and leave passed.');
     await motion.getByRole('button', { name: 'Open Research', exact: true }).focus();

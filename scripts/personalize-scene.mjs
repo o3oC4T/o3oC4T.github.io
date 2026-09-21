@@ -14,7 +14,7 @@ const replaceOnce = (from, to) => {
   scene = scene.replace(from, to);
 };
 replaceOnce('function rd(e,t,n,r,i)', `Object.assign(nd,${JSON.stringify(icons)});function rd(e,t,n,r,i)`);
-replaceOnce('M R I D U L   N A R N A U L I A       /       S E L E C T E D   W O R K', 'Y E O N G   C H O I       /       R E S E A R C H   &   C T F');
+replaceOnce('M R I D U L   N A R N A U L I A       /       S E L E C T E D   W O R K', 'Y E O N G   C H O I       /       D F I R   ·   A I');
 replaceOnce('Oe=_e.findIndex(e=>e.id===`hive`)', 'Oe=_e.findIndex(e=>e.accent===`rainbow`)');
 await writeFile(new URL('archive-scene.js', target), scene);
 await copyFile(`${snapshot}/_next/static/chunks/project-texture-data-ys3L3FN8.js`, new URL('textures.js', target));

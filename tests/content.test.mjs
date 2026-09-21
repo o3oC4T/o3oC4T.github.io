@@ -30,9 +30,17 @@ test('personal contact information is exact; no assumed LinkedIn', () => {
 test('scene identity and rainbow slot are personalized, motion constants intact', async () => {
   const scene = await readFile(new URL('../docs/assets/archive-scene.js', import.meta.url), 'utf8');
   assert.ok(scene.includes('Y E O N G   C H O I'));
+  assert.ok(scene.includes('Y E O N G   C H O I       /       D F I R   ·   A I'));
   assert.ok(scene.includes('Oe=_e.findIndex(e=>e.accent===`rainbow`)'));
   assert.ok(scene.includes('flyOut:1.08,flyBack:1.05,cameraFocus:1.55'));
   assert.ok(!scene.includes('M R I D U L'));
+});
+test('idle helper text and footer links are absent; hover caption remains', async () => {
+  const html = await readFile(new URL('../docs/index.html', import.meta.url), 'utf8');
+  const app = await readFile(new URL('../docs/app.js', import.meta.url), 'utf8');
+  assert.doesNotMatch(html + app, /Select a card to explore|View all 6 cards|class="minimal-footer"/);
+  assert.match(html, /class="box-caption"[^>]*hidden/);
+  assert.match(app, /createCaptionScramble/);
 });
 test('public application no longer contains reference identity, media or music', async () => {
   for (const path of ['index.html', 'app.js', 'content.js']) {

@@ -60,7 +60,7 @@ const base = process.argv[2] || 'http://127.0.0.1:4173';
     await page.evaluate(() => window.captionTest.set('06', 'Education'));
     await page.clock.runFor(600);
     assert.equal((await snapshot()).glyphs, '06Education↗');
-    await page.evaluate(() => window.captionTest.set('01 — 06', 'Select a card to explore', { animate: false }));
+    await page.evaluate(() => window.captionTest.set('', '', { animate: false }));
     assert.deepEqual((await snapshot()).states, ['idle', 'idle', 'idle']);
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.evaluate(() => window.captionTest.set('02', 'CTF'));

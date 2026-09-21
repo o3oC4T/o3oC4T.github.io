@@ -17,7 +17,7 @@ const dialog = $('#portfolio-dialog');
 const about = $('#about-scene');
 const mobile = matchMedia('(max-width: 760px)');
 const captionScramble = createCaptionScramble($('.box-caption'));
-captionScramble.set('01 — 06', 'Select a card to explore', { animate: false });
+captionScramble.set('', '', { animate: false });
 let selectCard, disposeScene, opener, dialogKind;
 let fallback = false, finishedLoading = false, pickerIndex = 0;
 
@@ -28,7 +28,8 @@ const state = {
   onHover(index) {
     state.hovered = index;
     const card = cards[index];
-    captionScramble.set(card ? number(index) : '01 — 06', card ? card.label : 'Select a card to explore', { animate: Boolean(card) });
+    $('.box-caption').hidden = !card;
+    captionScramble.set(card ? number(index) : '', card ? card.label : '', { animate: Boolean(card) });
     $('.box-caption').classList.toggle('is-hive', card?.accent === 'rainbow');
     $('.box-caption').style.color = card?.accent === 'rainbow' ? 'var(--hive-caption-accent, #c4f568)' : card?.color || '#91a27b';
     $('.box-caption').style.setProperty('--caption-accent', card?.accent === 'rainbow' ? 'var(--hive-caption-accent, #c4f568)' : card?.color || '#91a27b');
@@ -159,12 +160,6 @@ function openContact(trigger) {
   openDialog('contact', trigger);
 }
 
-function openIndex(trigger) {
-  dialogKind = 'index';
-  dialog.innerHTML = `${topbar('THE ARCHIVE')}<div class="info-body"><p class="section-eyebrow">SIX CHAPTERS</p><h1 id="dialog-title">Explore the archive.</h1><div class="index-cards">${cardLinks()}</div></div>`;
-  openDialog('index', trigger);
-}
-
 function cardLinks() {
   return cards.map((card, i) => `<button data-open="${i}" style="--card-color:${card.color}"><span>${number(i)}</span>${icon(card.symbol)}<strong>${card.label}</strong><span>↗</span></button>`).join('');
 }
@@ -231,7 +226,6 @@ document.addEventListener('click', async event => {
     case 'work': setAbout(false); break;
     case 'resume': openResume(button); break;
     case 'contact': openContact(button); break;
-    case 'index': openIndex(button); break;
     case 'close': closeDialog(); break;
     case 'print': window.print(); break;
     case 'previous-card': updatePicker((pickerIndex + 5) % 6); break;
@@ -247,7 +241,7 @@ document.addEventListener('keydown', event => {
 async function initializeScene() {
   try {
     const [{ createProjectBox }, { createProjectTexturePixels }] = await Promise.all([
-      import('./assets/archive-scene.js'), import('./assets/textures.js'), document.fonts.ready,
+      import('./assets/archive-scene.js?v=20260921-dfir'), import('./assets/textures.js'), document.fonts.ready,
     ]);
     if (fallback) return;
     const image = new Image();
