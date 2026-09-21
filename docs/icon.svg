@@ -1,4 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="MN">
-  <rect width="64" height="64" fill="#050605"/>
-  <text x="5" y="42" fill="#c4f568" font-family="Manrope, Arial, sans-serif" font-size="31" font-weight="700" letter-spacing="-4">MN</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="13" fill="#080908"/><path d="M10 19L20 32L30 19M20 32V46M54 22C43 14 34 21 34 32C34 44 44 50 54 42" fill="none" stroke="#c4f568" stroke-width="4" stroke-linecap="square"/></svg>

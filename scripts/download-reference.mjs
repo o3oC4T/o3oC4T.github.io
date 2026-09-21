@@ -3,7 +3,8 @@ import path from 'node:path';
 
 // Save the public files delivered to a browser, maintaining their URL paths.
 const origin = 'https://mridul.design';
-const destination = path.resolve('docs');
+// Keep a future reference capture separate from the personalized public site.
+const destination = path.resolve('reference/download');
 const queue = ['/'];
 const seen = new Set(queue);
 const downloaded = [];

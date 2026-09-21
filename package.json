@@ -1,0 +1,10 @@
+{
+  "name": "yeong-choi-portfolio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/content.test.mjs",
+    "test:browser": "node tests/browser-check.cjs"
+  },
+  "devDependencies": { "playwright": "1.63.0" }
+}

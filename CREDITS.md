@@ -1,19 +1,23 @@
-# Reference snapshot
+# Design and renderer attribution
 
-This version reproduces the browser-delivered portfolio at https://mridul.design/,
-linked from https://www.wallofportfolios.in/portfolios/mridul-narnaulia/.
+The archive-box design, WebGL scene, interaction choreography, and retained
+layout styles originate from [Mridul Narnaulia’s portfolio](https://mridul.design/),
+selected through [Wall of Portfolios](https://www.wallofportfolios.in/portfolios/mridul-narnaulia/).
+The public browser-delivered snapshot was retrieved on 2026-09-21.
 
-Original portfolio, artwork, project descriptions, name, résumé, and contact
-details are those of **Mridul Narnaulia**. They are retained as reference content
-while the owner of this repository reviews the requested original design.
-They do not describe the repository owner's work or identity.
+The deployed adaptation uses Yeong Choi’s supplied profile, research, competition
+records, education, and contact information. The reference author’s identity,
+project media, résumé, social links, and music player are not part of the
+personalized application. New UI code and structured content live separately
+from the retained renderer.
 
-The snapshot was retrieved on 2026-09-21. No ownership of the original design,
-artwork, or application code is claimed. This repository does not grant a new
-license to those materials. Dependency licenses remain with their respective
-authors. SoundCloud streaming, if enabled by the visitor, uses the original
-external player and is not an offline asset.
+The renderer has been adapted only for the name engraving, card icons, and
+identification of the rainbow-accent card. Its original camera, geometry,
+materials, lighting, and animation timings are retained. Unused image and font
+references have been removed from retained layout CSS.
 
-Changes made for static hosting: removed the original host's injected Cloudflare
-challenge, disabled search indexing for the reference draft, and included
-`.nojekyll` so GitHub Pages serves the `_next` directory.
+No ownership of the original design or renderer is claimed. Public availability
+does not itself establish a reuse license; this repository does not grant a new
+license to those materials. The original author’s rights and all third-party
+dependency licenses remain with their respective owners. Search indexing stays
+disabled for the draft.
