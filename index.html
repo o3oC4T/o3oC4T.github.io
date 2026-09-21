@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="o3oC4T의 작업과 기록을 모은 인터랙티브 포트폴리오 아카이브"
+    />
+    <meta name="theme-color" content="#090b09" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta property="og:title" content="o3oC4T — Portfolio Archive" />
+    <meta
+      property="og:description"
+      content="Selected work, experiments and things in progress."
+    />
+    <meta property="og:type" content="website" />
+    <title>o3oC4T — Portfolio Archive</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="data.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#archive">프로젝트로 바로가기</a>
+
+    <div class="boot" aria-live="polite" aria-label="포트폴리오 불러오는 중">
+      <div class="boot__inner">
+        <span class="boot__mark" aria-hidden="true">OC</span>
+        <div class="boot__track" aria-hidden="true"><span></span></div>
+        <p>ARCHIVE IS OPENING</p>
+      </div>
+    </div>
+
+    <div class="grain" aria-hidden="true"></div>
+    <div class="cursor-glow" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <button class="identity" type="button" data-open-panel="about" aria-label="소개 열기">
+        <span class="identity__mark" aria-hidden="true">
+          <span class="identity__first">o</span><span class="identity__rest">3o</span>
+          <span class="identity__first">C</span><span class="identity__rest">4T</span>
+        </span>
+        <span class="identity__status"><i></i> Available</span>
+      </button>
+
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <button type="button" data-open-panel="about">About</button>
+        <button type="button" data-open-panel="resume">Résumé</button>
+        <button class="nav-contact" type="button" data-open-panel="contact">
+          Let’s talk <span aria-hidden="true">↗</span>
+        </button>
+      </nav>
+    </header>
+
+    <main id="archive" class="archive" tabindex="-1">
+      <section class="archive__intro" aria-labelledby="archive-title">
+        <p class="eyebrow">PORTFOLIO / 2026</p>
+        <h1 id="archive-title">
+          A living archive of<br />
+          <span>selected work.</span>
+        </h1>
+        <p class="archive__lede" id="profile-intro"></p>
+      </section>
+
+      <div class="archive__meta" aria-hidden="true">
+        <span>SEOUL, KR</span>
+        <span class="archive__counter">00 PROJECTS</span>
+      </div>
+
+      <div class="archive__hint" aria-hidden="true">
+        <span class="archive__hint-desktop">DRAG TO EXPLORE · SCROLL TO MOVE</span>
+        <span class="archive__hint-mobile">SCROLL TO EXPLORE</span>
+      </div>
+
+      <div class="archive__viewport">
+        <div class="archive__world" id="project-world">
+          <svg class="connections" aria-hidden="true"></svg>
+          <div class="project-layer" id="project-layer"></div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <span>© <span id="current-year"></span></span>
+      <span>BUILT WITH CURIOSITY</span>
+      <button type="button" id="reset-view">RESET VIEW</button>
+    </footer>
+
+    <div class="panel-shell" id="panel-shell" hidden>
+      <button class="panel-backdrop" type="button" data-close-panel aria-label="패널 닫기"></button>
+      <section class="panel" role="dialog" aria-modal="true" aria-labelledby="panel-title">
+        <div class="panel__bar">
+          <span class="panel__index">ARCHIVE NOTE</span>
+          <button class="panel__close" type="button" data-close-panel aria-label="닫기">
+            <span></span><span></span>
+          </button>
+        </div>
+        <div class="panel__content" id="panel-content"></div>
+      </section>
+    </div>
+
+    <template id="project-template">
+      <button class="project-card" type="button">
+        <span class="project-card__art" aria-hidden="true">
+          <span class="art-shape art-shape--one"></span>
+          <span class="art-shape art-shape--two"></span>
+          <span class="art-shape art-shape--three"></span>
+          <span class="project-card__number"></span>
+        </span>
+        <span class="project-card__body">
+          <span class="project-card__topline">
+            <span class="project-card__year"></span>
+            <span class="project-card__arrow" aria-hidden="true">↗</span>
+          </span>
+          <strong class="project-card__title"></strong>
+          <span class="project-card__type"></span>
+        </span>
+      </button>
+    </template>
+
+    <noscript>
+      <div class="noscript">이 포트폴리오는 JavaScript를 사용합니다.</div>
+    </noscript>
+  </body>
+</html>
