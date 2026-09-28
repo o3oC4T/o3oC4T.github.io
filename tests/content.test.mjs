@@ -57,3 +57,12 @@ test('public application no longer contains reference identity, media or music',
     assert.doesNotMatch(text, /Mridul|Narnaulia|soundcloud|district-by|lakme|linkedin/i);
   }
 });
+test('share preview and browser title use the requested portfolio wording', async () => {
+  const html = await readFile(new URL('../docs/index.html', import.meta.url), 'utf8');
+  const head = html.split('</head>')[0];
+  assert.match(head, /<title>About Yeong Choi\.<\/title>/);
+  assert.match(head, /<meta property="og:title" content="About Yeong Choi\."\s*\/?\s*>/);
+  assert.match(head, /<meta property="og:description" content="C4T's portfolio"\s*\/?\s*>/);
+  assert.match(head, /<meta name="description" content="C4T's portfolio"\s*\/?\s*>/);
+  assert.doesNotMatch(head, /Research & CTF|최영의 연구, CTF, 팀 활동과 배움의 기록/);
+});
