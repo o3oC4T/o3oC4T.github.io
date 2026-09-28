@@ -16,11 +16,13 @@ const page = $('.archive-page');
 const box = $('.project-box');
 const dialog = $('#portfolio-dialog');
 const about = $('#about-scene');
+const pickerRail = $('.mobile-picker-rail');
 const mobile = matchMedia('(max-width: 760px)');
 const captionScramble = createCaptionScramble($('.box-caption'));
 captionScramble.set('', '', { animate: false });
 let selectCard, disposeScene, opener, dialogKind;
 let sceneFailed = false, finishedLoading = false, pickerIndex = 0;
+let pickerScrollTarget = null;
 
 const state = {
   cards, about: false, contact: false, paused: false, hovered: null,
@@ -172,9 +174,10 @@ function updatePicker(index, scroll = true) {
     button.setAttribute('aria-pressed', String(i === pickerIndex));
     button.dataset.active = String(i === pickerIndex);
   });
-  if (scroll) {
-    const rail = $('.mobile-picker-rail');
-    rail.scrollTo({ left: rail.clientWidth * pickerIndex, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+  if (scroll && pickerRail.clientWidth) {
+    // Keep the requested card selected while smooth scrolling passes other cards.
+    pickerScrollTarget = pickerIndex;
+    pickerRail.scrollTo({ left: pickerRail.clientWidth * pickerIndex, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
   }
 }
 
@@ -195,13 +198,37 @@ $('.mobile-picker-rail').innerHTML = cards.map((card, i) => `<article class="mob
 $('.mobile-picker-dots').innerHTML = cards.map((card, i) => `<button data-picker="${i}" aria-label="Select ${card.label}" aria-pressed="${i === 0}"><span></span></button>`).join('');
 about.innerHTML = `<button class="about-close" data-action="close-about" aria-label="Close about">✕</button>${aboutContent()}`;
 let scrollFrame;
-$('.mobile-picker-rail').addEventListener('scroll', event => {
+function syncPickerScroll() {
+  if (!mobile.matches || !pickerRail.clientWidth) return;
+  if (pickerScrollTarget !== null) {
+    if (Math.abs(pickerRail.scrollLeft - pickerRail.clientWidth * pickerScrollTarget) <= 1) pickerScrollTarget = null;
+    return;
+  }
+  const index = Math.round(pickerRail.scrollLeft / pickerRail.clientWidth);
+  if (index !== pickerIndex) updatePicker(index, false);
+}
+pickerRail.addEventListener('scroll', () => {
   cancelAnimationFrame(scrollFrame);
-  scrollFrame = requestAnimationFrame(() => {
-    const rail = event.target;
-    updatePicker(Math.round(rail.scrollLeft / rail.clientWidth), false);
-  });
+  scrollFrame = requestAnimationFrame(syncPickerScroll);
 }, { passive: true });
+pickerRail.addEventListener('scrollend', syncPickerScroll);
+// Direct gestures take control back from a button-triggered scroll.
+const releasePickerTarget = () => { pickerScrollTarget = null; };
+pickerRail.addEventListener('pointerdown', releasePickerTarget, { passive: true });
+pickerRail.addEventListener('touchstart', releasePickerTarget, { passive: true });
+pickerRail.addEventListener('wheel', releasePickerTarget, { passive: true });
+pickerRail.addEventListener('keydown', event => {
+  if (['ArrowLeft', 'ArrowRight', 'Home', 'End', 'PageUp', 'PageDown', ' '].includes(event.key)) releasePickerTarget();
+});
+let pickerWidth = pickerRail.clientWidth;
+new ResizeObserver(() => {
+  const width = pickerRail.clientWidth;
+  if (width === pickerWidth) return;
+  pickerWidth = width;
+  if (!width) return;
+  pickerScrollTarget = pickerIndex;
+  pickerRail.scrollTo({ left: width * pickerIndex, behavior: 'instant' });
+}).observe(pickerRail);
 mobile.addEventListener('change', updateViewport);
 updateViewport();
 updatePicker(0, false);

@@ -43,8 +43,11 @@ npx playwright install chromium
 # 로컬 서버를 실행한 상태에서
 npm run test:browser
 npm run test:caption
+npm run test:picker
 ```
 
 브라우저 검증은 6개 카드의 PC·모바일 열기/닫기, 소개, 이력서 인쇄, 연락처, Discord 복사, 가로 넘침, WebGL 오류 안내, 로딩 오류를 확인합니다. 결과 이미지는 무시되는 `test-results/`에 저장됩니다.
+
+모바일 선택기 검증은 실제 부드러운 스크롤을 사용해 화살표·점 선택·연속 클릭·스와이프·화면 크기 변경 중 선택 카드가 되돌아가지 않는지 확인합니다. 버튼 이동 중에는 목적지를 유지하며, 직접 스와이프할 때만 스크롤 위치에 맞춰 선택을 바꿉니다.
 
 기존 인물의 미디어·연락처·음악·애플리케이션 번들은 게시 폴더에서 제외했습니다. 원본 스냅샷은 Git 이력 및 로컬 `reference/retired-2026-09-21/`에서 복구할 수 있습니다. `scripts/download-reference.mjs`는 게시 파일을 덮어쓰지 않고 별도 `reference/download/`에 저장합니다. `scripts/personalize-scene.mjs`는 보관한 특정 버전의 원본 렌더러에서 개인화 변경을 재현하는 도구이며 일상적인 콘텐츠 수정에는 필요하지 않습니다.
