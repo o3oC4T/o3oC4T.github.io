@@ -135,7 +135,7 @@ function openCard(index, trigger) {
 }
 
 function aboutContent() {
-  return `<div class="about-eyebrow">ABOUT / YEONG CHOI</div><h2>최영<span class="about-english">Yeong Choi</span></h2><div class="yc-portrait" role="img" aria-label="YC monogram"><span>YC</span><small>FORENSICS · AI · CTF</small></div><p>고려대학교 인공지능사이버보안학과에 재학 중인 최영입니다. 디지털 포렌식과 사고 대응, AI를 중심으로 공부하고 연구합니다.</p><p>RubiyaLAB의 CTF 팀원, 학술팀 Team o3o의 리더로 활동하고 있습니다.</p>${tagList(['Korea Univ AICS', 'RubiyaLAB', 'Team o3o'])}<div class="about-links"><a href="mailto:${profile.email}">Email ↗</a><a href="${profile.github}" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="${profile.instagram}" target="_blank" rel="noopener noreferrer">Instagram ↗</a></div>`;
+  return `<div class="about-eyebrow">ABOUT / YEONG CHOI</div><h2>최영<span class="about-english">Yeong Choi</span></h2><div class="yc-portrait"><img src="/assets/profile-cat.jpg" width="400" height="400" alt="최영의 고양이 프로필 사진" decoding="async"><small>FORENSICS · AI · CTF</small></div><p>고려대학교 인공지능사이버보안학과에 재학 중인 최영입니다. 디지털 포렌식과 사고 대응, AI를 중심으로 공부하고 연구합니다.</p><p>RubiyaLAB의 CTF 팀원, 학술팀 Team o3o의 리더로 활동하고 있습니다.</p>${tagList(['Korea Univ AICS', 'RubiyaLAB', 'Team o3o'])}<div class="about-links"><a href="mailto:${profile.email}">Email ↗</a><a href="${profile.github}" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="${profile.instagram}" target="_blank" rel="noopener noreferrer">Instagram ↗</a></div>`;
 }
 
 function setAbout(visible) {

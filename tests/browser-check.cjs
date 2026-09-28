@@ -4,6 +4,13 @@ const fs = require('node:fs/promises');
 const base = process.argv[2] || 'http://127.0.0.1:4173';
 const names = ['Research', 'CTF', 'RubiyaLAB', 'Team o3o', 'Honors', 'Education'];
 const evidence = ['Co-First Author', 'Jinddabi’s', 'THJCC CTF 2026', 'MntcrlCTF 2026', '모두의 창업 1기', '고려대학교'];
+const checkProfile = async portrait => {
+  await portrait.evaluate(image => image.decode());
+  assert.deepEqual(await portrait.evaluate(image => {
+    const style = getComputedStyle(image);
+    return [image.naturalWidth, image.naturalHeight, style.borderRadius, style.objectFit];
+  }), [400, 400, '50%', 'cover']);
+};
 
 (async () => {
   await fs.mkdir('test-results', { recursive: true });
@@ -49,6 +56,7 @@ const evidence = ['Co-First Author', 'Jinddabi’s', 'THJCC CTF 2026', 'MntcrlCT
     await desktop.waitForFunction(() => document.querySelector('#about-scene').getAttribute('aria-hidden') === 'false');
     await desktop.waitForFunction(() => Number(getComputedStyle(document.querySelector('#about-scene')).opacity) > 0.99);
     assert.ok(await desktop.locator('#about-scene').innerText().then(t => t.includes('Team o3o')));
+    await checkProfile(desktop.locator('#about-scene .yc-portrait img'));
     await desktop.screenshot({ path: 'test-results/about.png', timeout: 30000 });
     await desktop.keyboard.press('Escape');
     await desktop.getByRole('button', { name: 'Résumé', exact: true }).click();
@@ -86,6 +94,7 @@ const evidence = ['Co-First Author', 'Jinddabi’s', 'THJCC CTF 2026', 'MntcrlCT
     }
     await mobile.getByRole('button', { name: 'About me', exact: true }).click();
     assert.ok((await mobile.locator('dialog').innerText()).includes('Yeong Choi'));
+    await checkProfile(mobile.locator('dialog .yc-portrait img'));
     await mobile.getByRole('button', { name: 'Close dialog', exact: true }).click();
     await mobile.getByRole('button', { name: 'Let’s talk', exact: true }).click();
     assert.ok((await mobile.locator('dialog').innerText()).includes('you_me._.'));
