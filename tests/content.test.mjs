@@ -42,6 +42,15 @@ test('idle helper text and footer links are absent; hover caption remains', asyn
   assert.match(html, /class="box-caption"[^>]*hidden/);
   assert.match(app, /createCaptionScramble/);
 });
+test('text-view mode is removed; scene failures only show an error and reload', async () => {
+  const files = await Promise.all(['index.html', 'app.js', 'styles.css'].map(file => readFile(new URL(`../docs/${file}`, import.meta.url), 'utf8')));
+  for (const source of files) assert.doesNotMatch(source, /텍스트로 보기|data-action="text-view"|showFallback|scene-fallback|fallback-cards|data-fallback|cardLinks/);
+  assert.match(files[0], /class="scene-error" role="alert" hidden/);
+  assert.match(files[0], /data-action="reload"/);
+  assert.doesNotMatch(files[0].match(/<div class="portfolio-loader"[^]*?<\/div>/)[0], /<button/);
+  assert.match(files[1], /onError: showSceneError/);
+  assert.match(files[1], /case 'reload': location.reload\(\)/);
+});
 test('public application no longer contains reference identity, media or music', async () => {
   for (const path of ['index.html', 'app.js', 'content.js']) {
     const text = await readFile(new URL(`../docs/${path}`, import.meta.url), 'utf8');

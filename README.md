@@ -15,7 +15,7 @@
 | Honors | 수상 및 창업 프로그램 등 활동 |
 | Education | 2018년부터 현재까지 교육 이력 |
 
-소개, 인쇄 가능한 이력서, 이메일·Instagram·Discord·GitHub 연락처를 제공합니다. Discord는 ID 복사 방식이며 LinkedIn은 아직 등록하지 않았습니다. WebGL을 사용할 수 없으면 동일 콘텐츠의 텍스트 목록을 제공합니다.
+소개, 인쇄 가능한 이력서, 이메일·Instagram·Discord·GitHub 연락처를 제공합니다. Discord는 ID 복사 방식이며 LinkedIn은 아직 등록하지 않았습니다. 별도의 텍스트 보기 모드는 없으며, 3D 화면을 불러오지 못하면 오류 안내와 새로고침 버튼을 표시합니다.
 
 콘텐츠는 사용자가 제공한 Notion 자료를 바탕으로 합니다. 원문에 없는 날짜·순위·초록·논문 링크는 만들지 않았습니다. 검색 색인은 검토 중인 초안에 맞춰 비활성화되어 있습니다.
 
@@ -45,6 +45,6 @@ npm run test:browser
 npm run test:caption
 ```
 
-브라우저 검증은 6개 카드의 PC·모바일 열기/닫기, 소개, 이력서 인쇄, 연락처, Discord 복사, 가로 넘침, WebGL 대체 화면, 로딩 오류를 확인합니다. 결과 이미지는 무시되는 `test-results/`에 저장됩니다.
+브라우저 검증은 6개 카드의 PC·모바일 열기/닫기, 소개, 이력서 인쇄, 연락처, Discord 복사, 가로 넘침, WebGL 오류 안내, 로딩 오류를 확인합니다. 결과 이미지는 무시되는 `test-results/`에 저장됩니다.
 
 기존 인물의 미디어·연락처·음악·애플리케이션 번들은 게시 폴더에서 제외했습니다. 원본 스냅샷은 Git 이력 및 로컬 `reference/retired-2026-09-21/`에서 복구할 수 있습니다. `scripts/download-reference.mjs`는 게시 파일을 덮어쓰지 않고 별도 `reference/download/`에 저장합니다. `scripts/personalize-scene.mjs`는 보관한 특정 버전의 원본 렌더러에서 개인화 변경을 재현하는 도구이며 일상적인 콘텐츠 수정에는 필요하지 않습니다.

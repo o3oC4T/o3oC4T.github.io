@@ -14,8 +14,8 @@
   <link rel="preload" href="/fonts/manrope-regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/reference-layout.css?v=20260921-pastel">
   <link rel="stylesheet" href="/assets/reference-mobile.css?v=20260921-pastel">
-  <link rel="stylesheet" href="/styles.css?v=20260921-pastel">
-  <script type="module" src="/app.js?v=20260921-pastel"></script>
+  <link rel="stylesheet" href="/styles.css?v=20260928-no-text-view">
+  <script type="module" src="/app.js?v=20260928-no-text-view"></script>
 </head>
 <body>
   <div class="archive-page" data-mobile="false" data-home-idle="false">
@@ -38,12 +38,12 @@
           <div class="mobile-picker-rail"></div>
           <div class="mobile-picker-controls"><button data-action="previous-card" aria-label="Previous card">←</button><div class="mobile-picker-dots"></div><button data-action="next-card" aria-label="Next card">→</button></div>
         </section>
-        <div class="scene-fallback" hidden><p>THE ARCHIVE / YEONG CHOI</p><h2>Research & CTF</h2><div class="fallback-cards"></div></div>
+        <section class="scene-error" role="alert" hidden><h2>3D 화면을 불러오지 못했습니다.</h2><p>새로고침하거나 WebGL을 지원하는 브라우저에서 다시 열어주세요.</p><button class="outline-button" data-action="reload">새로고침</button></section>
       </div>
       <aside id="about-scene" class="scene-about" aria-hidden="true" inert></aside>
     </main>
   </div>
-  <div class="portfolio-loader" role="status"><span class="loader-monogram">YC</span><span>Opening the archive<span class="loading-dots">…</span></span><button data-action="text-view">텍스트로 보기 ↗</button></div>
+  <div class="portfolio-loader" role="status"><span class="loader-monogram">YC</span><span>Opening the archive<span class="loading-dots">…</span></span></div>
   <dialog id="portfolio-dialog" aria-labelledby="dialog-title"></dialog>
   <noscript><section class="noscript"><h1>최영 · Yeong Choi</h1><p>고려대학교 인공지능사이버보안학과 · DFIR / AI</p><p>인터랙티브 포트폴리오를 보려면 JavaScript를 켜주세요.</p><a href="mailto:ilhsh4874@gmail.com">ilhsh4874@gmail.com</a></section></noscript>
 </body>

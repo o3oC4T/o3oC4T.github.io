@@ -20,7 +20,7 @@ const mobile = matchMedia('(max-width: 760px)');
 const captionScramble = createCaptionScramble($('.box-caption'));
 captionScramble.set('', '', { animate: false });
 let selectCard, disposeScene, opener, dialogKind;
-let fallback = false, finishedLoading = false, pickerIndex = 0;
+let sceneFailed = false, finishedLoading = false, pickerIndex = 0;
 
 const state = {
   cards, about: false, contact: false, paused: false, hovered: null,
@@ -53,14 +53,16 @@ function finishLoading() {
   page.dataset.homeIdle = 'true';
 }
 
-function showFallback() {
-  if (fallback) return;
-  fallback = true;
+function showSceneError() {
+  if (sceneFailed) return;
+  sceneFailed = true;
+  selectCard = undefined;
   disposeScene?.();
   box.querySelector('canvas')?.remove();
-  page.dataset.fallback = 'true';
-  $('.scene-fallback').hidden = false;
-  selectCard = (index, trigger) => openCard(index, trigger);
+  setAbout(false);
+  state.onHover(null);
+  page.dataset.sceneError = 'true';
+  $('.scene-error').hidden = false;
   finishLoading();
 }
 
@@ -143,7 +145,7 @@ function setAbout(visible) {
 }
 
 function openAbout(trigger) {
-  if (mobile.matches || fallback) {
+  if (mobile.matches || sceneFailed) {
     dialogKind = 'about';
     dialog.innerHTML = `${topbar('ABOUT')}<div class="info-body"><h1 class="sr-only" id="dialog-title">About Yeong Choi</h1>${aboutContent()}</div>`;
     openDialog('about', trigger);
@@ -160,10 +162,6 @@ function openContact(trigger) {
   dialogKind = 'contact';
   dialog.innerHTML = `${topbar('GET IN TOUCH')}<div class="info-body"><p class="section-eyebrow">CONTACT / YEONG CHOI</p><h1 id="dialog-title">Let’s talk.</h1><p class="contact-intro">연구와 협업에 관한 이야기를 기다립니다.</p><a class="contact-email" href="mailto:${profile.email}">이메일 보내기 <span>↗</span></a>${[profile.email, profile.universityEmail].map((email, index) => `<div class="email-row"><div><span>${index ? 'UNIVERSITY' : 'PRIMARY'}</span><a href="mailto:${email}">${email}</a></div><button data-copy="${email}" aria-label="Copy ${email}">복사</button></div>`).join('')}<div class="contact-socials"><a href="${profile.instagram}" target="_blank" rel="noopener noreferrer">Instagram <span>@ilh_sh ↗</span></a><div class="discord-row"><span>Discord</span><button data-copy="${profile.discord}" aria-label="Copy Discord ID ${profile.discord}">${profile.discord} <span>복사</span></button></div><a href="${profile.github}" target="_blank" rel="noopener noreferrer">GitHub <span>o3oC4T ↗</span></a></div><p class="copy-feedback" role="status" aria-live="polite"></p></div>`;
   openDialog('contact', trigger);
-}
-
-function cardLinks() {
-  return cards.map((card, i) => `<button data-open="${i}" style="--card-color:${card.color}"><span>${number(i)}</span>${icon(card.symbol)}<strong>${card.label}</strong><span>↗</span></button>`).join('');
 }
 
 function updatePicker(index, scroll = true) {
@@ -195,7 +193,6 @@ $$('.box-keyboard button').forEach((button, index) => {
 });
 $('.mobile-picker-rail').innerHTML = cards.map((card, i) => `<article class="mobile-picker-slide" style="--picker-accent:${card.color}"><p class="mobile-picker-number">${number(i)} / ${card.eyebrow}</p><h2>${icon(card.symbol)}${card.label}</h2><button data-select="${i}" aria-label="View ${card.label}">View ${card.label}<span>↗</span></button></article>`).join('');
 $('.mobile-picker-dots').innerHTML = cards.map((card, i) => `<button data-picker="${i}" aria-label="Select ${card.label}" aria-pressed="${i === 0}"><span></span></button>`).join('');
-$('.fallback-cards').innerHTML = cardLinks();
 about.innerHTML = `<button class="about-close" data-action="close-about" aria-label="Close about">✕</button>${aboutContent()}`;
 let scrollFrame;
 $('.mobile-picker-rail').addEventListener('scroll', event => {
@@ -232,7 +229,7 @@ document.addEventListener('click', async event => {
     case 'print': window.print(); break;
     case 'previous-card': updatePicker((pickerIndex + 5) % 6); break;
     case 'next-card': updatePicker((pickerIndex + 1) % 6); break;
-    case 'text-view': showFallback(); break;
+    case 'reload': location.reload(); break;
   }
 });
 document.addEventListener('keydown', event => {
@@ -245,23 +242,21 @@ async function initializeScene() {
     const [{ createProjectBox }, { createProjectTexturePixels }] = await Promise.all([
       import('./assets/archive-scene.js?v=20260921-pastel'), import('./assets/textures.js'), document.fonts.ready,
     ]);
-    if (fallback) return;
     const image = new Image();
     image.src = `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path fill="white" d="M5 2H14L20 8V22H5Z"/></svg>')}`;
     await image.decode();
-    if (fallback) return;
     disposeScene = createProjectBox(box, {
       getState: () => state,
       getButtons: () => $$('.box-keyboard button'),
-      onError: showFallback,
+      onError: showSceneError,
       registerSelect: select => { selectCard = select; },
     }, createProjectTexturePixels(), image);
     box.querySelector('canvas')?.addEventListener('webglcontextlost', event => {
-      event.preventDefault(); showFallback();
+      event.preventDefault(); showSceneError();
     }, { once: true });
   } catch (error) {
     console.error('Unable to initialize the archive scene:', error);
-    showFallback();
+    showSceneError();
   }
 }
 initializeScene();

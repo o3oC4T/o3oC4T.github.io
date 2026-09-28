@@ -20,6 +20,8 @@ const evidence = ['Co-First Author', 'Jinddabi’s', 'THJCC CTF 2026', 'MntcrlCT
       window.requestAnimationFrame = cb => raf(() => setTimeout(() => cb(performance.now()), 100));
     });
     await page.goto(base, { waitUntil: 'domcontentloaded' });
+    assert.equal(await page.getByRole('button', { name: '텍스트로 보기 ↗', exact: true }).count(), 0);
+    assert.equal(await page.locator('.scene-fallback, .fallback-cards').count(), 0);
     await page.waitForFunction(() => !document.querySelector('.portfolio-loader'), {}, { timeout: 90000 });
     await page.waitForTimeout(1500);
     return page;
@@ -131,6 +133,7 @@ const evidence = ['Co-First Author', 'Jinddabi’s', 'THJCC CTF 2026', 'MntcrlCT
     console.log('Normal-motion card flight and return passed, including rainbow card.');
 
     const plain = await browser.newPage();
+    plain.on('pageerror', e => errors.push(e.message));
     await plain.addInitScript(() => {
       const context = HTMLCanvasElement.prototype.getContext;
       HTMLCanvasElement.prototype.getContext = function(type, ...args) {
@@ -139,11 +142,21 @@ const evidence = ['Co-First Author', 'Jinddabi’s', 'THJCC CTF 2026', 'MntcrlCT
       };
     });
     await plain.goto(base);
-    await plain.locator('.scene-fallback:not([hidden])').waitFor({ timeout: 30000 });
-    await plain.locator('.fallback-cards button').first().click();
-    assert.equal(await plain.locator('#dialog-title').textContent(), 'Research');
+    await plain.locator('.scene-error:not([hidden])').waitFor({ timeout: 30000 });
+    assert.equal(await plain.locator('.portfolio-loader, .scene-fallback, .fallback-cards').count(), 0);
+    assert.ok(await plain.locator('.box-keyboard').isHidden());
+    assert.ok(await plain.locator('.mobile-project-picker').isHidden());
+    assert.ok(await plain.getByRole('button', { name: '새로고침', exact: true }).isVisible());
+    await plain.getByRole('button', { name: 'About Yeong Choi', exact: true }).click();
+    assert.equal(await plain.locator('#dialog-title').textContent(), 'About Yeong Choi');
+    await plain.keyboard.press('Escape');
+    await Promise.all([
+      plain.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+      plain.getByRole('button', { name: '새로고침', exact: true }).click(),
+    ]);
+    await plain.locator('.scene-error:not([hidden])').waitFor();
     await plain.close();
-    console.log('WebGL unavailable: text fallback passed.');
+    console.log('WebGL unavailable: error, reload and header navigation passed; no text-view mode.');
     assert.deepEqual(errors, []);
     assert.deepEqual(badResponses, []);
     console.log('All checks passed; no page errors or failed responses.');
