@@ -8,7 +8,7 @@ const section = (title, content) => `<section class="terminal-section"><h2 class
 function headingArt(card, index) {
   const style = artStyles[index % artStyles.length];
   const prefix = `title-${card.id}`;
-  return `<button type="button" class="terminal-art-button" data-art-title="${escape(card.label)}" data-art-prefix="${prefix}" data-art-style="${style}" data-art-phase="idle" aria-label="Change ${escape(card.label)} ASCII art style" title="Click to change ASCII style"><canvas class="terminal-art-field" aria-hidden="true"></canvas><span class="terminal-art-layer">${renderTitleArt(card.label, style, prefix)}</span></button>`;
+  return `<button type="button" class="terminal-art-button" data-art-title="${escape(card.label)}" data-art-prefix="${prefix}" data-art-style="${style}" data-art-phase="idle" aria-label="Change ${escape(card.label)} ASCII art style"><canvas class="terminal-art-field" aria-hidden="true"></canvas><span class="terminal-art-layer">${renderTitleArt(card.label, style, prefix)}</span></button>`;
 }
 
 function workItem(index, title, meta, content) {

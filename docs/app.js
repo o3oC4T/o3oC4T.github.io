@@ -1,7 +1,7 @@
 import { profile, icons, cards, research, ctf, team, honors, education } from './content.js?v=20260929-terminal';
 import { theme } from './theme.js';
 import { createCaptionScramble } from './caption-scramble.js?v=20260921-hover';
-import { renderDetailPage, updateDetailProgress } from './detail-pages.js?v=20260930-ascii';
+import { renderDetailPage, updateDetailProgress } from './detail-pages.js?v=20260930-clean-art';
 import { mountTitleArt } from './title-art-effects.js?v=20260930-ascii';
 import { createTouchCursor } from './touch-cursor.js?v=20260930-white-cursor';
 

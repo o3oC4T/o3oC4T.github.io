@@ -69,6 +69,7 @@ test('each detail page has its own command, title, and translated two-line intro
     assert.equal((svg.match(/<use /g) || []).length, grid.lines.join('').replaceAll(' ', '').length);
     assert.match(html, /class="terminal-art-field" aria-hidden="true"/);
     assert.ok(html.includes(`aria-label="Change ${card.label} ASCII art style"`));
+    assert.doesNotMatch(html, /\stitle="Click to change ASCII style"/);
     assert.equal((html.match(/<h1 /g) || []).length, 1);
     assert.match(html, /aria-label="Close project"/);
     assert.ok(html.includes(`data-open="${(index + 5) % 6}"`));

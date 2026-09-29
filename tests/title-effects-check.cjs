@@ -25,6 +25,7 @@ const field = page => page.locator('.terminal-art-field').evaluate(canvas => can
       };
       await open();
       const button = page.locator('.terminal-art-button');
+      assert.equal(await button.getAttribute('title'), null, 'No native hover tooltip on the art');
       const initial = await field(page);
       await page.waitForTimeout(300);
       assert.notEqual(await field(page), initial, 'Ambient ASCII moves with time');
