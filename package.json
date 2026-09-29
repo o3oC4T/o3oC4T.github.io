@@ -9,7 +9,8 @@
     "test:picker": "node tests/picker-check.cjs",
     "test:details": "node tests/details-check.cjs",
     "test:art": "node tests/title-art-check.cjs",
-    "test:art-effects": "node tests/title-effects-check.cjs"
+    "test:art-effects": "node tests/title-effects-check.cjs",
+    "test:cursor": "node tests/cursor-check.cjs"
   },
   "devDependencies": { "playwright": "1.63.0" }
 }

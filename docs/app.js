@@ -3,6 +3,7 @@ import { theme } from './theme.js';
 import { createCaptionScramble } from './caption-scramble.js?v=20260921-hover';
 import { renderDetailPage, updateDetailProgress } from './detail-pages.js?v=20260930-ascii';
 import { mountTitleArt } from './title-art-effects.js?v=20260930-ascii';
+import { createTouchCursor } from './touch-cursor.js?v=20260930-cat-cursor';
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -39,7 +40,8 @@ const state = {
     const accent = card?.accent === 'rainbow' ? `var(--hive-caption-accent, ${theme.accent})` : card?.color || theme.muted;
     $('.box-caption').style.color = accent;
     $('.box-caption').style.setProperty('--caption-accent', accent);
-    document.documentElement.style.setProperty('--portfolio-native-cursor', `url(/assets/cursor-${card?.accent || 'pink'}.svg) 5 3, auto`);
+    document.documentElement.style.setProperty('--portfolio-native-cursor', `url(/assets/cursor-${card?.accent || 'pink'}.svg?v=20260930-cat-cursor) 13 13, auto`);
+    touchCursor.sync();
   },
   onHoverSound() {},
   onAboutSettled(visible) {
@@ -48,6 +50,10 @@ const state = {
   },
   onReady: finishLoading,
 };
+
+const touchCursor = createTouchCursor(() => dialog.open
+  ? dialogKind === 'card' ? cards[state.projectIndex].accent : 'pink'
+  : mobile.matches ? cards[pickerIndex].accent : cards[state.hovered]?.accent || 'pink');
 
 function finishLoading() {
   if (finishedLoading) return;
@@ -95,6 +101,7 @@ function openDialog(kind, trigger) {
     disposeDetailArt = mountTitleArt(dialog.querySelector('.terminal-art-button'));
     requestAnimationFrame(() => updateDetailProgress(dialog));
   }
+  touchCursor.sync();
 }
 
 let detailScrollFrame;
@@ -106,6 +113,7 @@ dialog.addEventListener('scroll', () => {
 
 function closeDialog() { if (dialog.open) dialog.close(); }
 dialog.addEventListener('close', () => {
+  touchCursor.hide();
   disposeDetailArt?.();
   disposeDetailArt = undefined;
   dialogKind = null;
@@ -180,6 +188,7 @@ function updatePicker(index, scroll = true) {
     pickerScrollTarget = pickerIndex;
     pickerRail.scrollTo({ left: pickerRail.clientWidth * pickerIndex, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
   }
+  touchCursor.sync();
 }
 
 function updateViewport() {
