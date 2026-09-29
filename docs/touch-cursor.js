@@ -2,7 +2,7 @@
 // Passive touch events keep native scrolling and pinch-to-zoom intact.
 export function createTouchCursor(getAccent) {
   let marker, active = null, blocked = false, visible = false, timer = 0;
-  let x = 0, y = 0;
+  let x = 0, y = 0, target;
   function sync() {
     if (!visible) return;
     if (!marker) {
@@ -16,7 +16,7 @@ export function createTouchCursor(getAccent) {
     // A body overlay cannot render above a modal dialog's top layer.
     const host = document.querySelector('dialog[open]') || document.body;
     if (marker.parentElement !== host) host.append(marker);
-    const source = `/assets/cursor-${getAccent()}.svg?v=20260930-cat-cursor`;
+    const source = `/assets/cursor-${getAccent(target)}.svg?v=20260930-cat-cursor`;
     if (marker.getAttribute('src') !== source) marker.src = source;
     const left = Math.max(0, Math.min(innerWidth - 26, x - 13));
     const top = Math.max(0, Math.min(innerHeight - 26, y - 13));
@@ -30,7 +30,7 @@ export function createTouchCursor(getAccent) {
   }
   function show(touch) {
     clearTimeout(timer); timer = 0;
-    x = touch.clientX; y = touch.clientY;
+    x = touch.clientX; y = touch.clientY; target = touch.target;
     visible = true; sync();
   }
   function start(event) {

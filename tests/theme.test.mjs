@@ -24,6 +24,9 @@ test('UI recoloring preserves opacity, replaces green cursors, and is idempotent
   assert.ok(result.includes(theme.background));
   assert.ok(result.includes('cursor-pink.svg?v=20260930-cat-cursor) 13 13'));
   assert.equal(recolorCss(result), result);
+  const cursor = recolorCss('html:has(.archive-page){--portfolio-native-cursor:url(/cursor-lime.png) 7 6,auto}');
+  assert.ok(cursor.includes('cursor-white.svg?v=20260930-cat-cursor) 13 13'));
+  assert.equal(recolorCss(cursor), cursor);
 });
 test('published styles and renderer contain no original default lime', async () => {
   for (const file of ['styles.css', 'assets/reference-layout.css', 'assets/reference-mobile.css', 'assets/archive-scene.js', 'app.js', 'icon.svg']) {

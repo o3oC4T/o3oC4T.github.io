@@ -3,6 +3,7 @@ export const theme = {
   background: '#0c0910',
   surface: '#15101a',
   accent: '#ffb3df',
+  cursorDefault: '#f5f5f7',
   muted: '#ad99af',
   colors: {
     pink: '#ffb3df',

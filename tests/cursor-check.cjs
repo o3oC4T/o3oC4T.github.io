@@ -6,6 +6,7 @@ const version = '?v=20260930-cat-cursor';
 (async () => {
   const { cards } = await import('../docs/content.js');
   const { theme } = await import('../docs/theme.js');
+  const cursorColors = ['white', ...Object.keys(theme.colors)];
   const browser = await chromium.launch({ headless: true });
   const errors = [];
   try {
@@ -22,7 +23,9 @@ const version = '?v=20260930-cat-cursor';
         assert.equal(await page.evaluate(() => matchMedia('(any-hover: hover) and (any-pointer: fine)').matches), false);
         assert.ok(!(await cursor()).includes('cursor-'));
         assert.equal(await page.locator('.profile-touch-cursor').count(), 0, 'No indicator before touching');
-        assert.equal(new Set(cursorRequests).size, 6, 'Same six photo assets preload on mobile');
+        assert.equal(new Set(cursorRequests).size, cursorColors.length, 'Default and six card photo assets preload on mobile');
+        await page.getByRole('button', { name: 'Work', exact: true }).tap();
+        assert.ok((await page.locator('.profile-touch-cursor').getAttribute('src')).includes('cursor-white.svg'), 'Home navigation uses neutral white');
         for (const card of cards) {
           await page.getByRole('button', { name: `Select ${card.label}`, exact: true }).tap();
           assert.ok((await page.locator('.profile-touch-cursor').getAttribute('src')).includes(`cursor-${card.accent}.svg`));
@@ -72,7 +75,7 @@ const version = '?v=20260930-cat-cursor';
         await page.waitForFunction(() => document.querySelector('.archive-page').dataset.homeIdle === 'true');
         await page.getByRole('button', { name: 'About me', exact: true }).tap();
         assert.equal(await page.locator('.about-dialog .profile-touch-cursor').count(), 1);
-        assert.ok((await marker.getAttribute('src')).includes('cursor-pink.svg'));
+        assert.ok((await marker.getAttribute('src')).includes('cursor-white.svg'));
         await send('touchStart', [[195, 300]]);
         const aboutBounds = await marker.boundingBox();
         assert.ok(Math.abs(aboutBounds.x + 13 - 195) < 1 && Math.abs(aboutBounds.y + 13 - 300) < 1, 'Centered inside a non-fullscreen dialog');
@@ -85,32 +88,32 @@ const version = '?v=20260930-cat-cursor';
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
         await client.detach();
       } else {
-        assert.ok((await cursor()).includes(`cursor-pink.svg${version}`));
+        assert.ok((await cursor()).includes(`cursor-white.svg${version}`));
         for (const card of cards) {
           await page.getByRole('button', { name: `Open ${card.label}`, exact: true }).focus();
           assert.ok((await cursor()).includes(`cursor-${card.accent}.svg${version}`));
           assert.match(await cursor(), /13 13, auto$/);
         }
-        assert.equal(new Set(cursorRequests).size, 6, 'All six colors preload before the first card interaction');
+        assert.equal(new Set(cursorRequests).size, cursorColors.length, 'Default and all six colors preload before the first card interaction');
         await page.keyboard.press('Enter');
         assert.equal(await page.locator('#dialog-title').textContent(), 'Education');
         assert.ok((await page.locator('.terminal-art-button').evaluate(element => getComputedStyle(element).cursor)).includes('cursor-rainbow.svg'));
         await page.getByRole('button', { name: 'Close project', exact: true }).click();
         await page.waitForFunction(() => document.querySelector('.archive-page').dataset.homeIdle === 'true');
         await page.getByRole('button', { name: 'Résumé', exact: true }).focus();
-        assert.ok((await cursor()).includes('cursor-pink.svg'), 'Leaving the card restores pink');
+        assert.ok((await cursor()).includes('cursor-white.svg'), 'Leaving the card restores white');
         assert.equal(await page.locator('.profile-touch-cursor').count(), 0, 'No duplicate cursor for mouse-only interaction');
       }
       await page.close();
       console.log(`${mobile ? 'Touch' : 'Desktop'}: cursor selection, center hotspot, dialog interaction and loading behavior passed.`);
     }
-    const gallery = await browser.newPage({ viewport: { width: 680, height: 370 }, deviceScaleFactor: 2 });
+    const gallery = await browser.newPage({ viewport: { width: 800, height: 370 }, deviceScaleFactor: 2 });
     gallery.on('pageerror', error => errors.push(error.message));
     await gallery.route('**/__cursor-gallery', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><title>Cursor preview</title>' }));
     await gallery.goto(base + '/__cursor-gallery');
     // Native OS cursors are not included in browser screenshots. Display the
     // same SVG files at their true size and at 4× for a visual asset inspection.
-    await gallery.setContent(`<style>body{margin:0;font:12px monospace;background:#0c0910;color:#d2c3d5}h1{font:14px monospace;margin:24px}.row{display:flex;justify-content:space-around;padding:14px 24px}.cell{width:84px;text-align:center}.cell p{margin:8px 0}.actual img{width:26px;height:26px}.large img{width:104px;height:104px}.light{background:#f5eef3;color:#332632}</style><h1>26px profile cursor · 18% pastel tint</h1>${['actual', 'large', 'actual light'].map(kind => `<div class="row ${kind}">${Object.keys(theme.colors).map(color => `<div class="cell"><img src="${base}/assets/cursor-${color}.svg${version}" alt="${color}">${kind === 'actual' ? `<p>${color}</p>` : ''}</div>`).join('')}</div>`).join('')}`);
+    await gallery.setContent(`<style>body{margin:0;font:12px monospace;background:#0c0910;color:#d2c3d5}h1{font:14px monospace;margin:24px}.row{display:flex;justify-content:space-around;padding:14px 24px}.cell{width:84px;text-align:center}.cell p{margin:8px 0}.actual img{width:26px;height:26px}.large img{width:104px;height:104px}.light{background:#f5eef3;color:#332632}</style><h1>26px profile cursor · 18% pastel tint</h1>${['actual', 'large', 'actual light'].map(kind => `<div class="row ${kind}">${cursorColors.map(color => `<div class="cell"><img src="${base}/assets/cursor-${color}.svg${version}" alt="${color}">${kind === 'actual' ? `<p>${color}</p>` : ''}</div>`).join('')}</div>`).join('')}`);
     await gallery.locator('img').evaluateAll(images => Promise.all(images.map(image => image.decode())));
     const pixels = await gallery.locator('.actual:not(.light) img').evaluateAll(images => images.map(image => {
       const canvas = document.createElement('canvas');
@@ -126,10 +129,10 @@ const version = '?v=20260930-cat-cursor';
       assert.equal(image.center[3], 255, 'No hole in the photo');
       assert.ok(image.forehead.some((channel, i) => i < 3 && Math.abs(channel - image.eye[i]) > 20), 'Photo detail survives native cursor image decoding');
     }
-    assert.equal(new Set(pixels.map(image => image.center.join(','))).size, 6, 'Distinct subtle color tints');
+    assert.equal(new Set(pixels.map(image => image.center.join(','))).size, cursorColors.length, 'Distinct subtle color tints');
     await gallery.screenshot({ path: 'test-results/cursor-gallery.png' });
     await gallery.close();
     assert.deepEqual(errors, []);
-    console.log('Six self-contained SVGs decode with photo detail, transparent corners, intact centers and distinct tints.');
+    console.log('White default and six card SVGs decode with photo detail, transparent corners, intact centers and distinct tints.');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });
