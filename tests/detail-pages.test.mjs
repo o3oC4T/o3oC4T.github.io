@@ -55,7 +55,10 @@ test('each detail page has its own command, title, and translated two-line intro
     const intro = detailCopy[card.id];
     assert.ok(html.includes(`id="dialog-title" class="sr-only">${card.label}</h1>`));
     assert.ok(html.includes(`./${card.id}`));
-    assert.ok(html.includes('yeong@o3oc4t'));
+    assert.ok(html.includes('class="terminal-host">Yeong@C4T</span>'));
+    assert.ok(html.includes('class="terminal-status-host">[Yeong@C4T]</span>'));
+    assert.ok(html.includes(`aria-label="Yeong at C4T, open ${card.label}"`));
+    assert.doesNotMatch(html, /yeong@o3oc4t|yeong at o3oc4t/);
     assert.ok(html.includes(`class="terminal-lead" lang="en">${escape(intro.subtitle)}</p>`));
     assert.ok(html.includes(`class="terminal-description" lang="en">${escape(intro.description)}</p>`));
     assert.doesNotMatch(intro.subtitle + intro.description, /[가-힣]/);

@@ -34,6 +34,8 @@ const base = process.argv[2] || 'http://127.0.0.1:4173';
         assert.equal(await page.locator('.terminal-lead').textContent(), detailCopy[card.id].subtitle);
         assert.equal(await page.locator('.terminal-description').textContent(), detailCopy[card.id].description);
         assert.ok((await page.locator('.terminal-command').textContent()).includes(`./${card.id}`));
+        assert.equal(await page.locator('.terminal-host').textContent(), 'Yeong@C4T');
+        assert.equal(await page.locator('.terminal-status-host').textContent(), '[Yeong@C4T]');
         assert.ok(await dialog.evaluate(element => element.scrollWidth <= element.clientWidth + 1), `${card.label} overflow at ${width}px`);
         assert.ok(await page.locator('.terminal-title-art').evaluate(element => {
           const art = element.getBoundingClientRect(), bounds = element.parentElement.getBoundingClientRect();
