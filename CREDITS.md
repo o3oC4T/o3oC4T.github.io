@@ -32,6 +32,13 @@ his biography, portrait, project descriptions, scripts, and interactive games ar
 not included. The English introductions translate Yeong Choi’s existing page
 subtitles and descriptions rather than adding new career claims.
 
+The heading treatment also follows the reference’s shaded, halftone, rounded,
+punctuation and ANSI styles, click-to-remix glitch, and pointer-responsive
+ambient ASCII field. The glyph atlas, six title compositions, rendering,
+animation and cleanup logic are newly implemented. Individual glyphs use fixed
+SVG cells to retain the character-art appearance without platform font drift.
+Existing per-card pastel colors are preserved rather than using its palettes.
+
 JetBrains Mono is self-hosted under the SIL Open Font License 1.1. Its license is
 included at `docs/fonts/JetBrainsMono-OFL.txt`.
 

@@ -14,7 +14,7 @@ async function geometry(page) {
     const box = svg.getBoundingClientRect();
     const parent = svg.parentElement.getBoundingClientRect();
     const view = svg.viewBox.baseVal;
-    const face = svg.querySelector('.terminal-title-face');
+    const face = svg.querySelector('.terminal-title-tiles');
     const bounds = face.getBBox();
     const matrix = svg.getScreenCTM();
     const dialog = svg.closest('dialog');
@@ -24,7 +24,8 @@ async function geometry(page) {
       overflow: dialog.scrollWidth > dialog.clientWidth + 1,
       scaleX: matrix.a, scaleY: matrix.d,
       face: [bounds.x, bounds.y, bounds.width, bounds.height],
-      path: face.getAttribute('d'),
+      path: [...face.querySelectorAll('use')].map(cell => `${cell.getAttribute('x')},${cell.getAttribute('y')},${cell.getAttribute('href')}`).join(';'),
+      style: svg.closest('button').dataset.artStyle,
       fontDependentElements: svg.querySelectorAll('text, tspan, foreignObject, image, pattern, filter').length,
     };
   });
@@ -32,6 +33,7 @@ async function geometry(page) {
 
 (async () => {
   const { cards } = await import('../docs/content.js');
+  const { artStyles } = await import('../docs/title-art.js');
   const browser = await chromium.launch({ headless: true });
   const errors = [];
   await fs.mkdir('test-results', { recursive: true });
@@ -60,8 +62,9 @@ async function geometry(page) {
           assert.equal(current.overflow, false, context);
           assert.ok(Math.abs(current.width / current.height - current.expectedRatio) < .002, context);
           assert.ok(Math.abs(current.scaleX - current.scaleY) < .00001, context);
-          assert.deepEqual(current.face, initial.face, context);
+          assert.ok(current.face.every((value, i) => Math.abs(value - initial.face[i]) < .001), context);
           assert.equal(current.path, initial.path, context);
+          assert.equal(current.style, initial.style, context);
           if (deviceScaleFactor === 1 && [1280, 390, 320].includes(width)) {
             await art.screenshot({ path: `test-results/art-${card.id}-${width}.png` });
           }
@@ -80,12 +83,27 @@ async function geometry(page) {
           const current = await geometry(page);
           assert.ok(current.inside && !current.overflow, `${card.label}: zoom ${zoom}`);
           assert.ok(Math.abs(current.scaleX - current.scaleY) < .00001);
-          assert.deepEqual(current.face, initial.face);
+          // SVG getBBox uses float32 for fractional glyph details. Tile
+          // coordinates remain exact; allow only subpixel numeric roundoff.
+          assert.ok(current.face.every((value, i) => Math.abs(value - initial.face[i]) < .001));
         }
+        const button = page.locator('.terminal-art-button');
+        const styles = new Set();
+        for (let index = 0; index < artStyles.length; index++) {
+          const current = await geometry(page);
+          styles.add(current.style);
+          assert.equal(current.fontDependentElements, 0);
+          assert.ok(current.inside && !current.overflow);
+          assert.equal(await button.getAttribute('data-art-phase'), 'idle');
+          await button.click();
+        }
+        assert.equal(styles.size, artStyles.length);
+        assert.equal((await geometry(page)).style, initial.style);
         await page.getByRole('button', { name: 'Close project', exact: true }).click();
+        await page.waitForFunction(() => document.querySelector('.archive-page').dataset.homeIdle === 'true');
       }
       await page.close();
-      console.log(`All six titles: repeated resize, portrait/landscape, zoom, font independence and pixel-stable round trips passed at DPR ${deviceScaleFactor}.`);
+      console.log(`All six ASCII titles: five styles, repeated resize, portrait/landscape, zoom, font independence and pixel-stable round trips passed at DPR ${deviceScaleFactor}.`);
     }
     assert.deepEqual(errors, []);
   } finally { await browser.close(); }

@@ -1,15 +1,14 @@
 import { cards, detailCopy, research, ctf, rubiya, team, honors, education } from './content.js?v=20260929-terminal';
-import { titleArt } from './title-art.js?v=20260929-vector-art';
+import { artStyles, renderTitleArt } from './title-art.js?v=20260930-ascii';
 
 const escape = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const number = index => String(index + 1).padStart(2, '0');
 const section = (title, content) => `<section class="terminal-section"><h2 class="terminal-section-title"><span aria-hidden="true">// </span>${escape(title)}</h2>${content}</section>`;
 
-function headingArt(card) {
-  const art = titleArt(card.label);
-  // The exact viewBox, intrinsic size, and width cap all share one ratio.
-  // A joined outline avoids glyph fallback, row seams, and texture moiré.
-  return `<svg class="terminal-title-art" width="${art.width}" height="${art.height}" viewBox="0 0 ${art.width} ${art.height}" style="--title-art-ratio:${art.width / art.height}" preserveAspectRatio="xMinYMin meet" aria-hidden="true" focusable="false"><path d="${art.path}" transform="translate(3 4)" opacity=".25"/><path d="${art.path}" transform="translate(1.5 2)" opacity=".45"/><path class="terminal-title-face" d="${art.path}"/></svg>`;
+function headingArt(card, index) {
+  const style = artStyles[index % artStyles.length];
+  const prefix = `title-${card.id}`;
+  return `<button type="button" class="terminal-art-button" data-art-title="${escape(card.label)}" data-art-prefix="${prefix}" data-art-style="${style}" data-art-phase="idle" aria-label="Change ${escape(card.label)} ASCII art style" title="Click to change ASCII style"><canvas class="terminal-art-field" aria-hidden="true"></canvas><span class="terminal-art-layer">${renderTitleArt(card.label, style, prefix)}</span></button>`;
 }
 
 function workItem(index, title, meta, content) {
@@ -51,7 +50,7 @@ export function renderDetailPage(index) {
   const previous = (index + cards.length - 1) % cards.length;
   const next = (index + 1) % cards.length;
   return `<div class="detail-topbar terminal-topbar"><div class="terminal-command" aria-label="yeong at o3oc4t, open ${escape(card.label)}"><span class="terminal-host">yeong@o3oc4t</span><span class="terminal-shell"> ~ % </span><span>./${card.id}</span><span class="terminal-cursor" aria-hidden="true"></span></div><button class="detail-close" data-action="close" aria-label="Close project"><span>esc</span><span aria-hidden="true">✕</span></button></div>
-    <div class="detail-body terminal-body"><header class="terminal-hero"><h1 id="dialog-title" class="sr-only">${escape(card.label)}</h1>${headingArt(card)}<p class="terminal-role"><mark>${escape(card.eyebrow.toLowerCase())}</mark></p><p class="terminal-lead" lang="en">${escape(copy.subtitle)}</p><p class="terminal-description" lang="en">${escape(copy.description)}</p></header>
+    <div class="detail-body terminal-body"><header class="terminal-hero"><h1 id="dialog-title" class="sr-only">${escape(card.label)}</h1>${headingArt(card, index)}<p class="terminal-role"><mark>${escape(card.eyebrow.toLowerCase())}</mark></p><p class="terminal-lead" lang="en">${escape(copy.subtitle)}</p><p class="terminal-description" lang="en">${escape(copy.description)}</p></header>
     ${sectionContents(card.id)}
     <nav class="terminal-navigation" aria-label="Browse sections"><button data-open="${previous}"><span>← previous</span><strong>${escape(cards[previous].label)}</strong></button><button data-action="close"><span>cd ..</span><strong>The archive</strong></button><button data-open="${next}"><span>next →</span><strong>${escape(cards[next].label)}</strong></button></nav><footer class="terminal-signoff">yeong choi <span aria-hidden="true">/</span> ${escape(card.label.toLowerCase())} <span aria-hidden="true">/</span> ${number(index)} of 06</footer></div>
     <div class="terminal-status" aria-hidden="true"><span class="terminal-status-host">[yeong@o3oc4t]</span><span class="terminal-status-section">▸ ${escape(card.label.toLowerCase())}</span><span class="terminal-status-progress"><span class="terminal-meter">░░░░░░░░</span><span class="terminal-percent">00%</span></span></div>`;

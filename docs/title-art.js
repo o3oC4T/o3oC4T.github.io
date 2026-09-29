@@ -1,110 +1,115 @@
-// Original bitmap letterforms rendered as joined vector outlines. No font,
-// shaded Unicode glyphs, or repeated texture is involved in the title artwork.
+// Original ANSI letterforms. Every character occupies an exact SVG cell;
+// block texture survives font changes and fractional-DPI resizing.
 const alphabet = {
-  A: ['01110','11011','11011','11111','11011','11011','11011'],
-  B: ['11110','11011','11011','11110','11011','11011','11110'],
-  C: ['01111','11000','11000','11000','11000','11000','01111'],
-  D: ['11110','11011','11011','11011','11011','11011','11110'],
-  E: ['11111','11000','11000','11110','11000','11000','11111'],
-  F: ['11111','11000','11000','11110','11000','11000','11000'],
-  G: ['01111','11000','11000','11011','11011','11011','01111'],
-  H: ['11011','11011','11011','11111','11011','11011','11011'],
-  I: ['11111','00100','00100','00100','00100','00100','11111'],
-  J: ['00111','00011','00011','00011','11011','11011','01110'],
-  K: ['11011','11011','11110','11100','11110','11011','11011'],
-  L: ['11000','11000','11000','11000','11000','11000','11111'],
-  M: ['11011','11111','11111','11011','11011','11011','11011'],
-  N: ['10011','11011','11111','11111','11011','11011','11001'],
-  O: ['01110','11011','11011','11011','11011','11011','01110'],
-  P: ['11110','11011','11011','11110','11000','11000','11000'],
-  Q: ['01110','11011','11011','11011','11111','01110','00011'],
-  R: ['11110','11011','11011','11110','11110','11011','11011'],
-  S: ['01111','11000','11000','01110','00011','00011','11110'],
-  T: ['11111','00100','00100','00100','00100','00100','00100'],
-  U: ['11011','11011','11011','11011','11011','11011','01110'],
-  V: ['11011','11011','11011','11011','11011','01010','00100'],
-  W: ['11011','11011','11011','11011','11111','11111','01010'],
-  X: ['11011','11011','01010','00100','01010','11011','11011'],
-  Y: ['11011','11011','01110','00100','00100','00100','00100'],
-  Z: ['11111','00011','00110','00100','01100','11000','11111'],
-  0: ['01110','11011','11011','11011','11011','11011','01110'],
-  1: ['00100','01100','00100','00100','00100','00100','01110'],
-  2: ['01110','11011','00011','00110','01100','11000','11111'],
-  3: ['11110','00011','00011','01110','00011','00011','11110'],
-  4: ['11011','11011','11011','11111','00011','00011','00011'],
-  5: ['11111','11000','11000','11110','00011','00011','11110'],
-  6: ['01110','11000','11000','11110','11011','11011','01110'],
-  7: ['11111','00011','00110','00100','01100','01100','01100'],
-  8: ['01110','11011','11011','01110','11011','11011','01110'],
-  9: ['01110','11011','11011','01111','00011','00011','01110'],
-  ' ': ['000','000','000','000','000','000','000'],
+  A: ['0011100','0110110','1100011','1100011','1111111','1100011','1100011','1100011','1100011'],
+  B: ['1111110','0110011','0110011','0110011','0111110','0110011','0110011','0110011','1111110'],
+  C: ['0011110','0110011','1100000','1100000','1100000','1100000','1100000','0110011','0011110'],
+  D: ['1111100','0110110','0110011','0110011','0110011','0110011','0110011','0110110','1111100'],
+  E: ['1111111','0110011','0110000','0110100','0111100','0110100','0110000','0110011','1111111'],
+  F: ['1111111','0110011','0110000','0110100','0111100','0110100','0110000','0110000','1111000'],
+  G: ['0011110','0110011','1100000','1100000','1101111','1100011','1100011','0110011','0011110'],
+  H: ['1100011','1100011','1100011','1100011','1111111','1100011','1100011','1100011','1100011'],
+  I: ['1111111','0011100','0011100','0011100','0011100','0011100','0011100','0011100','1111111'],
+  J: ['0001111','0000110','0000110','0000110','0000110','0000110','1100110','1100110','0111100'],
+  K: ['1100011','1100110','1101100','1111000','1110000','1111000','1101100','1100110','1100011'],
+  L: ['1111000','0110000','0110000','0110000','0110000','0110000','0110000','0110011','1111111'],
+  M: ['1100011','1110111','1111111','1101011','1100011','1100011','1100011','1100011','1100011'],
+  N: ['1100011','1110011','1110011','1111011','1101111','1100111','1100111','1100011','1100011'],
+  O: ['0011100','0110110','1100011','1100011','1100011','1100011','1100011','0110110','0011100'],
+  P: ['1111110','0110011','0110011','0110011','0111110','0110000','0110000','0110000','1111000'],
+  Q: ['0011100','0110110','1100011','1100011','1100011','1101011','1101111','0110110','0000011'],
+  R: ['1111110','0110011','0110011','0110011','0111110','0111100','0110110','0110011','1110011'],
+  S: ['0111110','1100011','1100000','1110000','0111110','0000111','0000011','1100011','0111110'],
+  T: ['1111111','1011101','0011100','0011100','0011100','0011100','0011100','0011100','0111110'],
+  U: ['1100011','1100011','1100011','1100011','1100011','1100011','1100011','0110110','0011100'],
+  V: ['1100011','1100011','1100011','1100011','1100011','0110110','0110110','0011100','0001000'],
+  W: ['1100011','1100011','1100011','1100011','1101011','1101011','1111111','1110111','0100010'],
+  X: ['1100011','1100011','0110110','0011100','0001000','0011100','0110110','1100011','1100011'],
+  Y: ['1100011','1100011','0110110','0011100','0011100','0011100','0011100','0011100','0111110'],
+  Z: ['1111111','1100011','0000110','0001100','0011000','0110000','1100000','1100011','1111111'],
+  0: ['0011100','0110110','1100111','1101011','1101011','1110011','1100011','0110110','0011100'],
+  1: ['0011000','0111000','0011000','0011000','0011000','0011000','0011000','0011000','1111110'],
+  2: ['0111110','1100011','0000011','0000110','0001100','0011000','0110000','1100000','1111111'],
+  3: ['0111110','1100011','0000011','0000110','0011100','0000110','0000011','1100011','0111110'],
+  4: ['0001110','0011110','0110110','1100110','1100110','1111111','0000110','0000110','0001111'],
+  5: ['1111111','1100000','1100000','1111110','0000011','0000011','0000011','1100011','0111110'],
+  6: ['0011110','0110000','1100000','1111110','1100011','1100011','1100011','1100011','0111110'],
+  7: ['1111111','1100011','0000011','0000110','0001100','0011000','0011000','0011000','0011000'],
+  8: ['0111110','1100011','1100011','1100011','0111110','1100011','1100011','1100011','0111110'],
+  9: ['0111110','1100011','1100011','1100011','0111111','0000011','0000011','0000110','0111100'],
+  ' ': Array(9).fill('000'),
 };
 
-export function titleArt(title) {
+export const artStyles = ['ansi', 'halftone', 'rounded', 'figlet', 'shaded'];
+export const artGlyphs = '█▓▒░▀▄▌▐▖▗▘▝▚▞.:+#';
+export const cellSize = { width: 6, height: 10 };
+const square = (x, y, w, h = w) => `M${x},${y}h${w}v${h}h-${w}Z`;
+const glyphPaths = {
+  '█': square(0, 0, 6, 10),
+  '░': [[1,1],[4,4],[1,7]].map(([x,y]) => square(x,y,.9)).join(''),
+  '▒': [[0,0],[3,0],[1.5,2.5],[4.5,2.5],[0,5],[3,5],[1.5,7.5],[4.5,7.5]].map(([x,y]) => square(x,y,1.4)).join(''),
+  '▓': square(0,0,6,10) + [[1,1],[4,3.5],[1,6],[4,8.5]].map(([x,y]) => square(x,y,1.1)).join(''),
+  '▀': square(0,0,6,5), '▄': square(0,5,6,5),
+  '▌': square(0,0,3,10), '▐': square(3,0,3,10),
+  '▖': square(0,5,3,5), '▗': square(3,5,3,5),
+  '▘': square(0,0,3,5), '▝': square(3,0,3,5),
+  '▚': square(0,0,3,5) + square(3,5,3,5),
+  '▞': square(3,0,3,5) + square(0,5,3,5),
+  '.': square(2.2,7.5,1.6), ':': square(2.2,2,1.6) + square(2.2,6.5,1.6),
+  '+': 'M2.4,2H3.6V4.4H5.7V5.6H3.6V8H2.4V5.6H.3V4.4H2.4Z',
+  '#': 'M1.7,1H2.8L1.8,9H.7ZM4.1,1H5.2L4.2,9H3.1ZM.1,3H5.9V4.1H.1ZM0,6H5.8V7.1H0Z',
+};
+
+export function titleArt(title, style = 'ansi') {
   if (!title.trim()) throw new Error('A title is required');
+  if (!artStyles.includes(style)) throw new Error('Unknown art style');
   const letters = [...title.toUpperCase()].map(letter => {
     if (!alphabet[letter]) throw new Error(`Unsupported title character: ${letter}`);
     return alphabet[letter];
   });
-  const columns = letters.reduce((total, letter) => total + letter[0].length + 1, -1);
-  const pixels = Array.from({ length: 7 }, () => Array(columns).fill(false));
-  let offset = 0;
+  const columns = letters.reduce((sum, letter) => sum + letter[0].length + 2, 0) + 1;
+  const mask = Array.from({ length: 11 }, () => Array(columns).fill(false));
+  let offset = 1;
   for (const letter of letters) {
-    letter.forEach((row, y) => [...row].forEach((value, x) => {
-      pixels[y][offset + x] = value === '1';
-    }));
-    offset += letter[0].length + 1;
+    letter.forEach((row, y) => [...row].forEach((bit, x) => { mask[y + 1][offset + x] = bit === '1'; }));
+    offset += letter[0].length + 2;
   }
-  // 6 × 10 letter cells retain the terminal-style proportions. One unit of
-  // padding surrounds the complete face and its three-by-four-unit shadow.
-  return { width: columns * 6 + 5, height: 76, path: outline(pixels) };
-}
-
-function outline(pixels) {
-  const edges = [];
-  const outgoing = new Map();
-  const filled = (x, y) => pixels[y]?.[x] === true;
-  const key = (x, y) => `${x},${y}`;
-  const add = (x, y, nextX, nextY, direction) => {
-    const edge = { x, y, nextX, nextY, direction, used: false };
-    edges.push(edge);
-    const start = key(x, y);
-    if (!outgoing.has(start)) outgoing.set(start, []);
-    outgoing.get(start).push(edge);
-  };
-
-  // Only the perimeter survives: adjoining cells never have separate painted
-  // edges that could turn into hairline gaps at fractional scales.
-  pixels.forEach((row, y) => row.forEach((value, x) => {
-    if (!value) return;
-    if (!filled(x, y - 1)) add(x, y, x + 1, y, 0);
-    if (!filled(x + 1, y)) add(x + 1, y, x + 1, y + 1, 1);
-    if (!filled(x, y + 1)) add(x + 1, y + 1, x, y + 1, 2);
-    if (!filled(x - 1, y)) add(x, y + 1, x, y, 3);
-  }));
-
-  const contours = [];
-  const turnPriority = [1, 0, 3, 2]; // right, straight, left, reverse
-  for (const start of edges) {
-    if (start.used) continue;
-    let edge = start;
-    const points = [];
-    while (true) {
-      edge.used = true;
-      points.push([edge.x, edge.y]);
-      if (edge.nextX === start.x && edge.nextY === start.y) break;
-      const candidates = outgoing.get(key(edge.nextX, edge.nextY)).filter(candidate => !candidate.used);
-      const rank = candidate => turnPriority.indexOf((candidate.direction - edge.direction + 4) % 4);
-      candidates.sort((a, b) => rank(a) - rank(b));
-      if (!candidates.length) throw new Error('Unclosed title outline');
-      edge = candidates[0];
+  const grid = mask.map(row => row.map(() => ' '));
+  const filled = (x, y) => mask[y]?.[x] === true;
+  const hash = (x, y) => (x * 13 + y * 7) % 11;
+  mask.forEach((row, y) => row.forEach((on, x) => {
+    if (!on) return;
+    let glyph;
+    if (style === 'figlet') {
+      const ramp = y < 3 ? ':' : y < 6 ? ':+:' : '+#';
+      glyph = ramp[(x + y) % ramp.length];
+    } else if (style === 'rounded') {
+      glyph = !filled(x - 1,y) ? '▐' : !filled(x + 1,y) ? '▌' : '▓';
+    } else if (style === 'halftone') {
+      glyph = y < 4 ? '▓' : y < 6 ? '▒' : y < 8 ? '░' : '▓';
+      if (!filled(x - 1,y)) glyph = '▐';
+      if (!filled(x,y - 1) && filled(x + 1,y)) glyph = '▄';
+    } else if (style === 'shaded') {
+      glyph = ['█','█','▓','▓','▒','▒','░','▒','▓'][y - 1];
+      if (hash(x,y) === 0 && y > 2) glyph = '░';
+    } else {
+      glyph = !filled(x,y - 1) ? '▄' : !filled(x,y + 1) ? '▀'
+        : !filled(x - 1,y) ? '▒' : hash(x,y) < 3 ? '▓' : '█';
+      if (!filled(x - 1,y - 1) && !filled(x - 1,y)) glyph = y % 2 ? '▐' : '▓';
+      if (!filled(x + 1,y + 1)) grid[y + 1][x + 1] = '░';
     }
-    const corners = points.filter((_, index) => {
-      const previous = points[(index + points.length - 1) % points.length];
-      const next = points[(index + 1) % points.length];
-      return previous[0] !== next[0] && previous[1] !== next[1];
-    });
-    contours.push(corners.map(([x, y], index) => `${index ? 'L' : 'M'}${x * 6 + 1},${y * 10 + 1}`).join('') + 'Z');
-  }
-  return contours.join('');
+    grid[y][x] = glyph;
+  }));
+  return { columns, rows: grid.length, width: columns * 6, height: grid.length * 10, lines: grid.map(row => row.join('')), style };
 }
+
+const idFor = (prefix, glyph) => `${prefix}-${glyph.codePointAt(0).toString(16)}`;
+export function renderTitleArt(title, style, prefix) {
+  if (!/^[a-z0-9-]+$/.test(prefix)) throw new Error('Invalid art identifier');
+  const art = titleArt(title, style);
+  const definitions = [...artGlyphs].map(glyph => `<path id="${idFor(prefix,glyph)}" d="${glyphPaths[glyph]}"${glyph === '▓' ? ' fill-rule="evenodd"' : ''}/>`).join('');
+  const rows = art.lines.map((line, y) => `<g opacity="${(1 - y / art.rows * .35).toFixed(3)}">${[...line].map((glyph, x) => glyph === ' ' ? '' : `<use href="#${idFor(prefix,glyph)}" x="${x * 6}" y="${y * 10}" data-art-cell="${glyph}"/>`).join('')}</g>`).join('');
+  return `<svg class="terminal-title-art" width="${art.width}" height="${art.height}" viewBox="0 0 ${art.width} ${art.height}" style="--title-art-ratio:${art.width / art.height}" preserveAspectRatio="xMinYMin meet" aria-hidden="true" focusable="false"><defs>${definitions}</defs><g class="terminal-title-tiles">${rows}</g></svg>`;
+}
+
+export function glyphReference(prefix, glyph) { return `#${idFor(prefix,glyph)}`; }

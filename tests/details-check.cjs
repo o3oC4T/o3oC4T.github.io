@@ -50,6 +50,9 @@ const base = process.argv[2] || 'http://127.0.0.1:4173';
         assert.equal(await dialog.evaluate(element => element.scrollTop), 0);
         await page.getByRole('button', { name: 'Close project', exact: true }).click();
         assert.equal(await page.locator('dialog[open]').count(), 0);
+        // The native close event restores focus asynchronously. Wait for the
+        // return lifecycle before directing keyboard input to the next card.
+        await page.waitForFunction(() => document.querySelector('.archive-page').dataset.homeIdle === 'true');
       }
       await page.getByRole('button', { name: 'Résumé', exact: true }).click();
       assert.equal(await page.locator('.terminal-title-art').count(), 0);

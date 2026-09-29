@@ -1,7 +1,8 @@
 import { profile, icons, cards, research, ctf, team, honors, education } from './content.js?v=20260929-terminal';
 import { theme } from './theme.js';
 import { createCaptionScramble } from './caption-scramble.js?v=20260921-hover';
-import { renderDetailPage, updateDetailProgress } from './detail-pages.js?v=20260929-vector-art';
+import { renderDetailPage, updateDetailProgress } from './detail-pages.js?v=20260930-ascii';
+import { mountTitleArt } from './title-art-effects.js?v=20260930-ascii';
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -21,7 +22,7 @@ const pickerRail = $('.mobile-picker-rail');
 const mobile = matchMedia('(max-width: 760px)');
 const captionScramble = createCaptionScramble($('.box-caption'));
 captionScramble.set('', '', { animate: false });
-let selectCard, disposeScene, opener, dialogKind;
+let selectCard, disposeScene, disposeDetailArt, opener, dialogKind;
 let sceneFailed = false, finishedLoading = false, pickerIndex = 0;
 let pickerScrollTarget = null;
 
@@ -78,6 +79,8 @@ function educationList() {
 }
 
 function openDialog(kind, trigger) {
+  disposeDetailArt?.();
+  disposeDetailArt = undefined;
   captionScramble.finish();
   if (!dialog.open) opener = trigger || document.activeElement;
   dialogKind = kind;
@@ -88,7 +91,10 @@ function openDialog(kind, trigger) {
   if (!dialog.open) dialog.showModal();
   dialog.scrollTop = 0;
   dialog.querySelector('[data-action="close"]')?.focus({ preventScroll: true });
-  if (kind === 'card') requestAnimationFrame(() => updateDetailProgress(dialog));
+  if (kind === 'card') {
+    disposeDetailArt = mountTitleArt(dialog.querySelector('.terminal-art-button'));
+    requestAnimationFrame(() => updateDetailProgress(dialog));
+  }
 }
 
 let detailScrollFrame;
@@ -100,6 +106,8 @@ dialog.addEventListener('scroll', () => {
 
 function closeDialog() { if (dialog.open) dialog.close(); }
 dialog.addEventListener('close', () => {
+  disposeDetailArt?.();
+  disposeDetailArt = undefined;
   dialogKind = null;
   // Let the renderer observe the covered/paused card even after a very fast close.
   // It schedules its next frame before onOpen, so this releases it afterwards.
