@@ -32,8 +32,8 @@ export function recolorCss(css) {
       saturation > .5 && lightness > .35 && lightness < .8 ? Math.max(lightness, .76) : lightness) + alpha;
   }).replaceAll('--lime', '--accent').replace(/url\(\/cursor-(lime|purple|blue|orange|pink|red)\.png\)/g,
     (_, name) => `url(/assets/cursor-${({ lime: 'pink', purple: 'lilac', blue: 'sky', orange: 'peach', pink: 'pink', red: 'pink' })[name]}.svg)`)
-    .replace(/url\(\/assets\/cursor-([a-z]+)\.svg(?:\?v=[\w-]+)?\) (?:7 6|5 3|13 13)/g,
-      (_, name) => `url(/assets/cursor-${name}.svg?v=20260930-cat-cursor) 13 13`)
+    .replace(/url\(\/assets\/cursor-([a-z]+)\.svg(?:\?v=[\w-]+)?\) (?:7 6|5 3|13 13|15 15|18 18)/g,
+      (_, name) => `url(/assets/cursor-${name}.svg?v=20260930-cursor36) 18 18`)
     .replace('html:has(.archive-page){--portfolio-native-cursor:url(/assets/cursor-pink.svg?',
       'html:has(.archive-page){--portfolio-native-cursor:url(/assets/cursor-white.svg?');
 }
@@ -86,7 +86,7 @@ export async function writeCursors() {
   for (const [name, color] of Object.entries({ white: theme.cursorDefault, ...theme.colors })) {
     // Embedded photo keeps the SVG self-contained in native cursor image mode.
     // One complete circle, a light tint, and a small rim; no arrow or cutout.
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26"><defs><clipPath id="crop"><circle cx="13" cy="13" r="12"/></clipPath><linearGradient id="tint" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${color}"/><stop offset="1" stop-color="${name === 'rainbow' ? theme.colors.sky : color}"/></linearGradient></defs><g clip-path="url(#crop)"><image x="1" y="1" width="24" height="24" preserveAspectRatio="xMidYMid slice" href="data:image/jpeg;base64,${photo}"/><circle cx="13" cy="13" r="12" fill="url(#tint)" opacity=".18"/></g><circle cx="13" cy="13" r="12.2" fill="none" stroke="#251324" stroke-width="1"/><circle cx="13" cy="13" r="11.7" fill="none" stroke="url(#tint)" stroke-opacity=".8" stroke-width=".8"/></svg>\n`;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 26 26"><defs><clipPath id="crop"><circle cx="13" cy="13" r="12"/></clipPath><linearGradient id="tint" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${color}"/><stop offset="1" stop-color="${name === 'rainbow' ? theme.colors.sky : color}"/></linearGradient></defs><g clip-path="url(#crop)"><image x="1" y="1" width="24" height="24" preserveAspectRatio="xMidYMid slice" href="data:image/jpeg;base64,${photo}"/><circle cx="13" cy="13" r="12" fill="url(#tint)" opacity=".18"/></g><circle cx="13" cy="13" r="12.2" fill="none" stroke="#251324" stroke-width="1"/><circle cx="13" cy="13" r="11.7" fill="none" stroke="url(#tint)" stroke-opacity=".8" stroke-width=".8"/></svg>\n`;
     await writeFile(new URL(`../docs/assets/cursor-${name}.svg`, import.meta.url), svg);
   }
 }

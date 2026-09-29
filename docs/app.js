@@ -3,7 +3,7 @@ import { theme } from './theme.js';
 import { createCaptionScramble } from './caption-scramble.js?v=20260921-hover';
 import { renderDetailPage, updateDetailProgress } from './detail-pages.js?v=20260930-c4t-host';
 import { mountTitleArt } from './title-art-effects.js?v=20260930-ascii';
-import { createTouchCursor } from './touch-cursor.js?v=20260930-white-cursor';
+import { createTouchCursor } from './touch-cursor.js?v=20260930-cursor36';
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -40,7 +40,7 @@ const state = {
     const accent = card?.accent === 'rainbow' ? `var(--hive-caption-accent, ${theme.accent})` : card?.color || theme.muted;
     $('.box-caption').style.color = accent;
     $('.box-caption').style.setProperty('--caption-accent', accent);
-    document.documentElement.style.setProperty('--portfolio-native-cursor', `url(/assets/cursor-${card?.accent || 'white'}.svg?v=20260930-cat-cursor) 13 13, auto`);
+    document.documentElement.style.setProperty('--portfolio-native-cursor', `url(/assets/cursor-${card?.accent || 'white'}.svg?v=20260930-cursor36) 18 18, auto`);
     touchCursor.sync();
   },
   onHoverSound() {},

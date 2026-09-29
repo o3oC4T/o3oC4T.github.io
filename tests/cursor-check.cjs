@@ -1,7 +1,7 @@
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const assert = require('node:assert/strict');
 const base = process.argv[2] || 'http://127.0.0.1:4173';
-const version = '?v=20260930-cat-cursor';
+const version = '?v=20260930-cursor36';
 
 (async () => {
   const { cards } = await import('../docs/content.js');
@@ -45,12 +45,12 @@ const version = '?v=20260930-cat-cursor';
           // Passive native-scroll touchmove delivery is compositor-scheduled.
           await page.waitForFunction(point => {
             const box = document.querySelector('.profile-touch-cursor').getBoundingClientRect();
-            return Math.abs(box.x + 13 - point.x) < 1 && Math.abs(box.y + 13 - point.y) < 1;
+            return Math.abs(box.x + 18 - point.x) < 1 && Math.abs(box.y + 18 - point.y) < 1;
           }, { x: 195, y }, { timeout: 3000 });
           const bounds = await marker.boundingBox();
-          assert.equal(bounds.width, 26);
-          assert.equal(bounds.height, 26);
-          assert.ok(Math.abs(bounds.x + 13 - 195) < 1 && Math.abs(bounds.y + 13 - y) < 1,
+          assert.equal(bounds.width, 36);
+          assert.equal(bounds.height, 36);
+          assert.ok(Math.abs(bounds.x + 18 - 195) < 1 && Math.abs(bounds.y + 18 - y) < 1,
             `Touch photo follows the finger, including native scrolling: ${JSON.stringify({ bounds, x: 195, y, transform: await marker.evaluate(element => element.style.transform) })}`);
           assert.equal(await marker.getAttribute('data-visible'), 'true');
         }
@@ -78,7 +78,7 @@ const version = '?v=20260930-cat-cursor';
         assert.ok((await marker.getAttribute('src')).includes('cursor-white.svg'));
         await send('touchStart', [[195, 300]]);
         const aboutBounds = await marker.boundingBox();
-        assert.ok(Math.abs(aboutBounds.x + 13 - 195) < 1 && Math.abs(aboutBounds.y + 13 - 300) < 1, 'Centered inside a non-fullscreen dialog');
+        assert.ok(Math.abs(aboutBounds.x + 18 - 195) < 1 && Math.abs(aboutBounds.y + 18 - 300) < 1, 'Centered inside a non-fullscreen dialog');
         await page.emulateMedia({ media: 'print' });
         assert.equal(await marker.isVisible(), false, 'No touch marker in printed documents');
         await page.emulateMedia({ media: 'screen' });
@@ -92,7 +92,7 @@ const version = '?v=20260930-cat-cursor';
         for (const card of cards) {
           await page.getByRole('button', { name: `Open ${card.label}`, exact: true }).focus();
           assert.ok((await cursor()).includes(`cursor-${card.accent}.svg${version}`));
-          assert.match(await cursor(), /13 13, auto$/);
+          assert.match(await cursor(), /18 18, auto$/);
         }
         assert.equal(new Set(cursorRequests).size, cursorColors.length, 'Default and all six colors preload before the first card interaction');
         await page.keyboard.press('Enter');
@@ -112,19 +112,19 @@ const version = '?v=20260930-cat-cursor';
     await gallery.route('**/__cursor-gallery', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><title>Cursor preview</title>' }));
     await gallery.goto(base + '/__cursor-gallery');
     // Native OS cursors are not included in browser screenshots. Display the
-    // same SVG files at their true size and at 4× for a visual asset inspection.
-    await gallery.setContent(`<style>body{margin:0;font:12px monospace;background:#0c0910;color:#d2c3d5}h1{font:14px monospace;margin:24px}.row{display:flex;justify-content:space-around;padding:14px 24px}.cell{width:84px;text-align:center}.cell p{margin:8px 0}.actual img{width:26px;height:26px}.large img{width:104px;height:104px}.light{background:#f5eef3;color:#332632}</style><h1>26px profile cursor · 18% pastel tint</h1>${['actual', 'large', 'actual light'].map(kind => `<div class="row ${kind}">${cursorColors.map(color => `<div class="cell"><img src="${base}/assets/cursor-${color}.svg${version}" alt="${color}">${kind === 'actual' ? `<p>${color}</p>` : ''}</div>`).join('')}</div>`).join('')}`);
+    // same SVG files at their true size and enlarged for visual inspection.
+    await gallery.setContent(`<style>body{margin:0;font:12px monospace;background:#0c0910;color:#d2c3d5}h1{font:14px monospace;margin:24px}.row{display:flex;justify-content:space-around;padding:14px 24px}.cell{width:84px;text-align:center}.cell p{margin:8px 0}.actual img{width:36px;height:36px}.large img{width:104px;height:104px}.light{background:#f5eef3;color:#332632}</style><h1>36px profile cursor · 18% pastel tint</h1>${['actual', 'large', 'actual light'].map(kind => `<div class="row ${kind}">${cursorColors.map(color => `<div class="cell"><img src="${base}/assets/cursor-${color}.svg${version}" alt="${color}">${kind === 'actual' ? `<p>${color}</p>` : ''}</div>`).join('')}</div>`).join('')}`);
     await gallery.locator('img').evaluateAll(images => Promise.all(images.map(image => image.decode())));
     const pixels = await gallery.locator('.actual:not(.light) img').evaluateAll(images => images.map(image => {
       const canvas = document.createElement('canvas');
-      canvas.width = canvas.height = 26;
+      canvas.width = canvas.height = 36;
       const context = canvas.getContext('2d');
       context.drawImage(image, 0, 0);
       const pixel = (x, y) => [...context.getImageData(x, y, 1, 1).data];
-      return { size: [image.naturalWidth, image.naturalHeight], corners: [pixel(0,0),pixel(25,0),pixel(0,25),pixel(25,25)], center: pixel(13,13), forehead: pixel(13,7), eye: pixel(7,13) };
+      return { size: [image.naturalWidth, image.naturalHeight], corners: [pixel(0,0),pixel(35,0),pixel(0,35),pixel(35,35)], center: pixel(18,18), forehead: pixel(18,10), eye: pixel(10,18) };
     }));
     for (const image of pixels) {
-      assert.deepEqual(image.size, [26, 26]);
+      assert.deepEqual(image.size, [36, 36]);
       assert.ok(image.corners.every(pixel => pixel[3] === 0), 'Transparent outside the circle');
       assert.equal(image.center[3], 255, 'No hole in the photo');
       assert.ok(image.forehead.some((channel, i) => i < 3 && Math.abs(channel - image.eye[i]) > 20), 'Photo detail survives native cursor image decoding');

@@ -9,7 +9,7 @@
 .minimal-footer{display:flex;justify-content:space-between;font-size:10px;letter-spacing:.1em;color:#937f8a;align-items:center}.minimal-footer button{font:11px Manrope,sans-serif;letter-spacing:.02em;min-height:32px}.minimal-footer button:hover{color:var(--accent)}.footer-separator{opacity:.4;margin:0 12px}.box-caption{font-size:12px;min-height:30px}.caption-number{font:10px monospace;opacity:.7}
 .scene-about .about-close{margin:0;padding:0;display:grid;place-items:center}.scene-about p{word-break:keep-all}
 .box-caption .about-matrix{--matrix-accent:var(--caption-accent,#ffb3df)}
-.profile-touch-cursor{position:fixed;inset:0 auto auto 0;z-index:2147483647;display:block;width:26px;height:26px;max-width:none;margin:0;padding:0;border:0;pointer-events:none;user-select:none;opacity:0;transition:opacity .16s linear}
+.profile-touch-cursor{position:fixed;inset:0 auto auto 0;z-index:2147483647;display:block;width:36px;height:36px;max-width:none;margin:0;padding:0;border:0;pointer-events:none;user-select:none;opacity:0;transition:opacity .16s linear}
 .profile-touch-cursor[data-visible=true]{opacity:1}
 @media print{.profile-touch-cursor{display:none!important}}
 .portfolio-loader{z-index:100;position:fixed;inset:0;background:#0c0910;display:flex;align-items:center;justify-content:center;gap:22px;flex-direction:column;color:#9e7f90;font-size:11px;letter-spacing:.07em}.loader-monogram{color:var(--accent);font-size:46px;letter-spacing:-.12em;margin-left:-.12em}.loading-dots{animation:pulse 1.2s infinite}@keyframes pulse{50%{opacity:.2}}

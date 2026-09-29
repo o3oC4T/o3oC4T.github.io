@@ -11,15 +11,15 @@ export function createTouchCursor(getAccent) {
       marker.alt = '';
       marker.setAttribute('aria-hidden', 'true');
       marker.draggable = false;
-      marker.width = marker.height = 26;
+      marker.width = marker.height = 36;
     }
     // A body overlay cannot render above a modal dialog's top layer.
     const host = document.querySelector('dialog[open]') || document.body;
     if (marker.parentElement !== host) host.append(marker);
-    const source = `/assets/cursor-${getAccent(target)}.svg?v=20260930-cat-cursor`;
+    const source = `/assets/cursor-${getAccent(target)}.svg?v=20260930-cursor36`;
     if (marker.getAttribute('src') !== source) marker.src = source;
-    const left = Math.max(0, Math.min(innerWidth - 26, x - 13));
-    const top = Math.max(0, Math.min(innerHeight - 26, y - 13));
+    const left = Math.max(0, Math.min(innerWidth - 36, x - 18));
+    const top = Math.max(0, Math.min(innerHeight - 36, y - 18));
     marker.style.transform = `translate3d(${left}px, ${top}px, 0)`;
     marker.dataset.visible = 'true';
   }

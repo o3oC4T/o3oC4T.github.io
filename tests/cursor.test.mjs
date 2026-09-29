@@ -3,11 +3,11 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { theme } from '../docs/theme.js';
 
-test('white default and six card cursors embed the original photo in one complete 26px circle', async () => {
+test('white default and six card cursors embed the original photo in one complete 36px circle', async () => {
   const photo = await readFile(new URL('../docs/assets/profile-cat.jpg', import.meta.url));
   for (const [name, color] of Object.entries({ white: theme.cursorDefault, ...theme.colors })) {
     const svg = await readFile(new URL(`../docs/assets/cursor-${name}.svg`, import.meta.url), 'utf8');
-    assert.match(svg, /width="26" height="26" viewBox="0 0 26 26"/);
+    assert.match(svg, /width="36" height="36" viewBox="0 0 26 26"/);
     assert.match(svg, /<clipPath id="crop"><circle cx="13" cy="13" r="12"\/><\/clipPath>/);
     assert.equal((svg.match(/<clipPath /g) || []).length, 1);
     assert.equal((svg.match(/<image /g) || []).length, 1);
@@ -22,13 +22,13 @@ test('cursor coordinates are centered and every image is versioned and preloaded
   const css = await readFile(new URL('../docs/assets/reference-layout.css', import.meta.url), 'utf8');
   const app = await readFile(new URL('../docs/app.js', import.meta.url), 'utf8');
   const html = await readFile(new URL('../docs/index.html', import.meta.url), 'utf8');
-  assert.equal((css.match(/cursor-[a-z]+\.svg\?v=20260930-cat-cursor\) 13 13/g) || []).length, 12);
-  assert.match(app, /\.svg\?v=20260930-cat-cursor\) 13 13, auto/);
+  assert.equal((css.match(/cursor-[a-z]+\.svg\?v=20260930-cursor36\) 18 18/g) || []).length, 12);
+  assert.match(app, /\.svg\?v=20260930-cursor36\) 18 18, auto/);
   assert.doesNotMatch(app + css, /cursor-[^)]*\) 5 3/);
   assert.match(css, /html:has\(\.archive-page\)\{--portfolio-native-cursor:url\(\/assets\/cursor-white\.svg/);
   assert.match(app, /card\?\.accent \|\| 'white'/);
   for (const color of ['white', ...Object.keys(theme.colors)]) {
-    assert.ok(html.includes(`<link rel="preload" as="image" href="/assets/cursor-${color}.svg?v=20260930-cat-cursor">`));
+    assert.ok(html.includes(`<link rel="preload" as="image" href="/assets/cursor-${color}.svg?v=20260930-cursor36">`));
   }
 });
 
