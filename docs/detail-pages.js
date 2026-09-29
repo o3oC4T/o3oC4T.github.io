@@ -1,15 +1,15 @@
 import { cards, detailCopy, research, ctf, rubiya, team, honors, education } from './content.js?v=20260929-terminal';
-import { titleArt } from './title-art.js?v=20260929-terminal';
+import { titleArt } from './title-art.js?v=20260929-vector-art';
 
 const escape = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const number = index => String(index + 1).padStart(2, '0');
 const section = (title, content) => `<section class="terminal-section"><h2 class="terminal-section-title"><span aria-hidden="true">// </span>${escape(title)}</h2>${content}</section>`;
 
 function headingArt(card) {
-  const lines = titleArt(card.label);
-  // SVG gives character art a fluid, exact aspect ratio without cutting off
-  // long titles on narrow phones. A separate h1 supplies the accessible name.
-  return `<svg class="terminal-title-art" viewBox="0 0 ${lines[0].length * 6.1} ${lines.length * 10 + 2}" preserveAspectRatio="xMinYMid meet" aria-hidden="true" focusable="false"><text font-family="monospace" font-size="10" xml:space="preserve">${lines.map((line, index) => `<tspan x="0" y="${9 + index * 10}">${line}</tspan>`).join('')}</text></svg>`;
+  const art = titleArt(card.label);
+  // The exact viewBox, intrinsic size, and width cap all share one ratio.
+  // A joined outline avoids glyph fallback, row seams, and texture moiré.
+  return `<svg class="terminal-title-art" width="${art.width}" height="${art.height}" viewBox="0 0 ${art.width} ${art.height}" style="--title-art-ratio:${art.width / art.height}" preserveAspectRatio="xMinYMin meet" aria-hidden="true" focusable="false"><path d="${art.path}" transform="translate(3 4)" opacity=".25"/><path d="${art.path}" transform="translate(1.5 2)" opacity=".45"/><path class="terminal-title-face" d="${art.path}"/></svg>`;
 }
 
 function workItem(index, title, meta, content) {

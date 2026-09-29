@@ -1,7 +1,7 @@
 import { profile, icons, cards, research, ctf, team, honors, education } from './content.js?v=20260929-terminal';
 import { theme } from './theme.js';
 import { createCaptionScramble } from './caption-scramble.js?v=20260921-hover';
-import { renderDetailPage, updateDetailProgress } from './detail-pages.js?v=20260929-terminal';
+import { renderDetailPage, updateDetailProgress } from './detail-pages.js?v=20260929-vector-art';
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];

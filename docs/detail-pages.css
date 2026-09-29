@@ -54,8 +54,7 @@
 @keyframes terminal-blink { 50% { opacity: 0; } }
 .terminal-detail .terminal-body { max-width: 820px; width: 100%; padding: 18px 32px 84px; }
 .terminal-hero { padding: 8px 0 72px; }
-.terminal-title-art { display: block; width: 100%; height: auto; max-height: 220px; fill: var(--detail-accent); overflow: visible; }
-.terminal-title-art text { white-space: pre; }
+.terminal-title-art { display: block; width: 100%; max-width: calc(220px * var(--title-art-ratio)); height: auto; aspect-ratio: var(--title-art-ratio); fill: var(--detail-accent); overflow: hidden; }
 .terminal-role { margin: 30px 0 26px; font-size: 12px; }
 .terminal-detail mark { background: var(--detail-accent); color: #170f1b; padding: 1px 5px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 .terminal-lead { font-size: 17px; line-height: 1.85; margin-bottom: 16px; text-wrap: pretty; }
@@ -104,7 +103,7 @@
   .terminal-detail .terminal-topbar > .detail-close > span:first-child { display: none; }
   .terminal-detail .terminal-body { padding: 22px 22px 84px; }
   .terminal-hero { padding-top: 0; padding-bottom: 54px; }
-  .terminal-title-art { min-height: 60px; max-height: 165px; }
+  .terminal-title-art { max-width: calc(165px * var(--title-art-ratio)); }
   .terminal-role { font-size: 10px; margin: 25px 0 22px; }
   .terminal-lead { font-size: 16px; }
   .terminal-description { font-size: 13px; line-height: 1.9; }
