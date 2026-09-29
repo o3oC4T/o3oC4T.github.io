@@ -4,6 +4,8 @@ import { createCaptionScramble } from './caption-scramble.js?v=20260921-hover';
 import { renderDetailPage, updateDetailProgress } from './detail-pages.js?v=20260930-c4t-host';
 import { mountTitleArt } from './title-art-effects.js?v=20260930-ascii';
 import { createTouchCursor } from './touch-cursor.js?v=20260930-cursor36';
+import { createArchiveLoader } from './loader.js?v=20260930-loader';
+import { createCursorTrail } from './cursor-trail.js?v=20260930-trail';
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -21,6 +23,7 @@ const dialog = $('#portfolio-dialog');
 const about = $('#about-scene');
 const pickerRail = $('.mobile-picker-rail');
 const mobile = matchMedia('(max-width: 760px)');
+const loader = createArchiveLoader($('.portfolio-loader'));
 const captionScramble = createCaptionScramble($('.box-caption'));
 captionScramble.set('', '', { animate: false });
 let selectCard, disposeScene, disposeDetailArt, opener, dialogKind;
@@ -42,6 +45,7 @@ const state = {
     $('.box-caption').style.setProperty('--caption-accent', accent);
     document.documentElement.style.setProperty('--portfolio-native-cursor', `url(/assets/cursor-${card?.accent || 'white'}.svg?v=20260930-cursor36) 18 18, auto`);
     touchCursor.sync();
+    cursorTrail.sync();
   },
   onHoverSound() {},
   onAboutSettled(visible) {
@@ -51,17 +55,23 @@ const state = {
   onReady: finishLoading,
 };
 
-const touchCursor = createTouchCursor(target => {
+function cursorAccent(target) {
   if (dialog.open) return dialogKind === 'card' ? cards[state.projectIndex].accent : 'white';
   if (mobile.matches) return target?.closest('.mobile-project-picker, .project-box > canvas') ? cards[pickerIndex].accent : 'white';
   return cards[state.hovered]?.accent || 'white';
-});
+}
+const touchCursor = createTouchCursor(cursorAccent);
+const cursorTrail = createCursorTrail(cursorAccent);
 
 function finishLoading() {
-  if (finishedLoading) return;
+  if (finishedLoading || sceneFailed) return;
   finishedLoading = true;
+  loader.complete(revealArchive);
+}
+
+function revealArchive() {
   state.canStart = true;
-  $('.portfolio-loader')?.remove();
+  page.inert = false;
   page.dataset.homeIdle = 'true';
 }
 
@@ -75,7 +85,9 @@ function showSceneError() {
   state.onHover(null);
   page.dataset.sceneError = 'true';
   $('.scene-error').hidden = false;
-  finishLoading();
+  finishedLoading = true;
+  loader.dismiss();
+  revealArchive();
 }
 
 function recordList(records) {
@@ -87,6 +99,7 @@ function educationList() {
 }
 
 function openDialog(kind, trigger) {
+  cursorTrail.hide();
   disposeDetailArt?.();
   disposeDetailArt = undefined;
   captionScramble.finish();
@@ -115,6 +128,7 @@ dialog.addEventListener('scroll', () => {
 
 function closeDialog() { if (dialog.open) dialog.close(); }
 dialog.addEventListener('close', () => {
+  cursorTrail.hide();
   touchCursor.hide();
   disposeDetailArt?.();
   disposeDetailArt = undefined;
@@ -191,6 +205,7 @@ function updatePicker(index, scroll = true) {
     pickerRail.scrollTo({ left: pickerRail.clientWidth * pickerIndex, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
   }
   touchCursor.sync();
+  cursorTrail.sync();
 }
 
 function updateViewport() {
@@ -278,18 +293,29 @@ document.addEventListener('keydown', event => {
 // Retain the public reference renderer's geometry and motions, with personal identity/icons.
 async function initializeScene() {
   try {
+    loader.mark('interface');
+    const track = (promise, stage) => promise.then(value => { loader.mark(stage); return value; });
     const [{ createProjectBox }, { createProjectTexturePixels }] = await Promise.all([
-      import('./assets/archive-scene.js?v=20260921-pastel'), import('./assets/textures.js'), document.fonts.ready,
+      track(import('./assets/archive-scene.js?v=20260921-pastel'), 'renderer'),
+      track(import('./assets/textures.js'), 'textures'),
+      track(document.fonts.ready, 'fonts'),
     ]);
     const image = new Image();
     image.src = `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path fill="white" d="M5 2H14L20 8V22H5Z"/></svg>')}`;
     await image.decode();
+    loader.mark('icon');
+    // Paint milestone updates before the CPU/GPU-heavy synchronous steps.
+    const nextPaint = () => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    await nextPaint();
+    const pixels = createProjectTexturePixels();
+    loader.mark('surfaces');
+    await nextPaint();
     disposeScene = createProjectBox(box, {
       getState: () => state,
       getButtons: () => $$('.box-keyboard button'),
       onError: showSceneError,
       registerSelect: select => { selectCard = select; },
-    }, createProjectTexturePixels(), image);
+    }, pixels, image);
     box.querySelector('canvas')?.addEventListener('webglcontextlost', event => {
       event.preventDefault(); showSceneError();
     }, { once: true });
