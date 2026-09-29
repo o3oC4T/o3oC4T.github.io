@@ -17,6 +17,8 @@
 
 소개, 인쇄 가능한 이력서, 이메일·Instagram·Discord·GitHub 연락처를 제공합니다. Discord는 ID 복사 방식이며 LinkedIn은 아직 등록하지 않았습니다. 별도의 텍스트 보기 모드는 없으며, 3D 화면을 불러오지 못하면 오류 안내와 새로고침 버튼을 표시합니다.
 
+6개 세부 페이지는 터미널 명령줄과 각 페이지 이름의 문자 아트로 시작합니다. 제목 아래 두 문장은 기존 부제와 설명을 영어로 번역한 것입니다. 연구·팀 활동은 번호가 있는 작업 목록, 수상·대회 성적·교육 이력은 간결한 경력형 행으로 구성했습니다.
+
 콘텐츠는 사용자가 제공한 Notion 자료를 바탕으로 합니다. 원문에 없는 날짜·순위·초록·논문 링크는 만들지 않았습니다. 검색 색인은 검토 중인 초안에 맞춰 비활성화되어 있습니다.
 
 ## 수정 및 미리 보기
@@ -24,6 +26,8 @@
 - `docs/content.js`: 프로필, 카드, 연구, 대회·교육 이력의 단일 데이터 원본
 - `docs/theme.js`: 파스텔 핑크 기본색과 카드별 파스텔 팔레트
 - `docs/app.js`: 화면 렌더링, 접근성, 연락처 복사, 모바일 탐색
+- `docs/detail-pages.js`, `docs/detail-pages.css`: 6개 세부 페이지의 터미널 스타일과 콘텐츠 배치
+- `docs/title-art.js`: 카드 이름을 문자 아트로 만드는 자체 비트맵 알파벳
 - `docs/caption-scramble.js`: 원본 타이밍의 카드 번호·이름·화살표 글자 스크램블
 - `docs/styles.css`: 개인 콘텐츠 및 반응형 스타일
 - `docs/assets/archive-scene.js`: 개인화한 원본 3D 렌더러
@@ -44,6 +48,7 @@ npx playwright install chromium
 npm run test:browser
 npm run test:caption
 npm run test:picker
+npm run test:details
 ```
 
 브라우저 검증은 6개 카드의 PC·모바일 열기/닫기, 소개, 이력서 인쇄, 연락처, Discord 복사, 가로 넘침, WebGL 오류 안내, 로딩 오류를 확인합니다. 결과 이미지는 무시되는 `test-results/`에 저장됩니다.

@@ -103,3 +103,31 @@ export const cards = [
   { id: 'honors', label: 'Honors', symbol: 'medal', accent: 'mint', color: theme.colors.mint, eyebrow: 'RECOGNITION & ACTIVITIES', subtitle: '배움이 성과로 이어지는 순간.', description: '정보보호 영재교육, 보안 경진대회, 해커톤의 수상과 그 밖의 활동입니다.', meta: ['Awards', 'Hackathon', 'Activities'] },
   { id: 'education', label: 'Education', symbol: 'book', accent: 'rainbow', color: theme.colors.rainbow, eyebrow: 'LEARNING / 2018 — PRESENT', subtitle: '호기심에서 시작한 여정.', description: '과학 영재교육에서 인공지능사이버보안 전공까지, 배움의 기록입니다.', meta: ['Korea University', 'AICS', '2026 — Present'] },
 ];
+
+// Direct English translations of each card's existing subtitle and description.
+export const detailCopy = {
+  research: {
+    subtitle: 'Security research that connects the evidence.',
+    description: 'Two studies presented at the WISA 2026 Poster Session and my authorship roles.',
+  },
+  ctf: {
+    subtitle: 'Solving challenges. Pushing the limits.',
+    description: 'Finalist appearances and awards in domestic and international cybersecurity competitions.',
+  },
+  rubiyalab: {
+    subtitle: 'A record of challenges solved together.',
+    description: 'Competitions I entered as a RubiyaLAB CTF team member and the team’s results.',
+  },
+  'team-o3o': {
+    subtitle: 'Building the next chapter as a team.',
+    description: 'Competition results from my work as the leader of the academic team, Team o3o.',
+  },
+  honors: {
+    subtitle: 'When learning becomes achievement.',
+    description: 'Awards from information-security gifted education, cybersecurity competitions, and hackathons, alongside other activities.',
+  },
+  education: {
+    subtitle: 'A journey that began with curiosity.',
+    description: 'My educational journey, from science gifted education to a major in AI and cybersecurity.',
+  },
+};

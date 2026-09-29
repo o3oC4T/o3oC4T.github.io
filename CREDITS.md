@@ -24,6 +24,17 @@ The card-caption matrix-text animation is adapted from the reference's
 text component into `docs/caption-scramble.js`, retaining its glyph cadence,
 letter-by-letter reveal, and reduced-motion behavior.
 
+The six detail pages take visual cues from [Serg Zorin’s portfolio](https://sergzorin.com/),
+selected through [Wall of Portfolios](https://www.wallofportfolios.in/portfolios/sergey-zorin/):
+the terminal prompt, character-art heading, numbered selected-work entries, and
+compact experience rows. Their rendering code and bitmap title alphabet are new;
+his biography, portrait, project descriptions, scripts, and interactive games are
+not included. The English introductions translate Yeong Choi’s existing page
+subtitles and descriptions rather than adding new career claims.
+
+JetBrains Mono is self-hosted under the SIL Open Font License 1.1. Its license is
+included at `docs/fonts/JetBrainsMono-OFL.txt`.
+
 No ownership of the original design or renderer is claimed. Public availability
 does not itself establish a reuse license; this repository does not grant a new
 license to those materials. The original author’s rights and all third-party

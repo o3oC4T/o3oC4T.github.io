@@ -1,6 +1,7 @@
-import { profile, icons, cards, research, ctf, rubiya, team, honors, education } from './content.js?v=20260921-pastel';
+import { profile, icons, cards, research, ctf, team, honors, education } from './content.js?v=20260929-terminal';
 import { theme } from './theme.js';
 import { createCaptionScramble } from './caption-scramble.js?v=20260921-hover';
+import { renderDetailPage, updateDetailProgress } from './detail-pages.js?v=20260929-terminal';
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -72,24 +73,8 @@ function recordList(records) {
   return `<ol class="record-list">${records.map((record, i) => `<li${record.featured ? ' class="featured-record"' : ''}><span class="record-number">${number(i)}</span><div><h3>${escape(record.name)}</h3>${record.note ? `<p>${escape(record.note)}</p>` : ''}</div><strong>${escape(record.result)}</strong></li>`).join('')}</ol>`;
 }
 
-function researchCards() {
-  return `<div class="research-grid">${research.map(paper => `<article class="paper"><div class="paper-meta"><span>${escape(paper.venue)}</span><span>NO. ${paper.number}</span></div><div class="paper-icon">${icon('document')}</div><h3>${escape(paper.title)}</h3><div class="paper-role"><span>AUTHORSHIP</span><strong>${escape(paper.role)}</strong></div>${tagList(paper.tags)}</article>`).join('')}</div>`;
-}
-
 function educationList() {
   return `<ol class="education-list">${education.map(item => `<li${item.current ? ' class="current-education"' : ''}><span class="education-period">${escape(item.period)}</span><div><h3>${escape(item.school)}${item.current ? '<span class="current-label">CURRENT</span>' : ''}</h3><p>${escape(item.course)}</p></div></li>`).join('')}</ol>`;
-}
-
-function sectionContents(id) {
-  switch (id) {
-    case 'research': return researchCards();
-    case 'ctf': return recordList(ctf);
-    case 'rubiyalab': return `<div class="section-note"><span>ROLE</span><p>RubiyaLAB · CTF Member</p></div>${recordList(rubiya)}<section class="activity-note"><span>EXPEDITION</span><h3>def-cam CTF (D-CTF) Quals</h3><p>RubiyaLAB 원정대 활동</p></section>`;
-    case 'team-o3o': return `<div class="team-banner"><span>o3o</span><div><p>ACADEMIC TEAM</p><h3>Team o3o</h3><span>Leader</span></div>${icon('flag')}</div>${recordList(team)}`;
-    case 'honors': return `${recordList(honors)}<section class="activity-note"><span>ACTIVITIES</span><h3>모두의 창업 1기</h3><p>창업 프로그램 참여</p><h3>제 9회 정보보호영재교육원 경진대회</h3><p>대회 참여 기록</p></section>`;
-    case 'education': return educationList();
-    default: return '';
-  }
 }
 
 function openDialog(kind, trigger) {
@@ -98,12 +83,20 @@ function openDialog(kind, trigger) {
   dialogKind = kind;
   state.paused = true;
   page.dataset.homeIdle = 'false';
-  dialog.className = kind === 'card' ? 'archive-detail' : `info-dialog ${kind}-dialog`;
+  dialog.className = kind === 'card' ? 'archive-detail terminal-detail' : `info-dialog ${kind}-dialog`;
   dialog.dataset.slot = 'dialog-content';
   if (!dialog.open) dialog.showModal();
   dialog.scrollTop = 0;
   dialog.querySelector('[data-action="close"]')?.focus({ preventScroll: true });
+  if (kind === 'card') requestAnimationFrame(() => updateDetailProgress(dialog));
 }
+
+let detailScrollFrame;
+dialog.addEventListener('scroll', () => {
+  if (dialogKind !== 'card') return;
+  cancelAnimationFrame(detailScrollFrame);
+  detailScrollFrame = requestAnimationFrame(() => updateDetailProgress(dialog));
+}, { passive: true });
 
 function closeDialog() { if (dialog.open) dialog.close(); }
 dialog.addEventListener('close', () => {
@@ -130,7 +123,7 @@ function openCard(index, trigger) {
   dialog.dataset.project = card.id;
   dialog.style.setProperty('--detail-accent', card.color);
   dialog.style.setProperty('--detail-edge', `${card.color}28`);
-  dialog.innerHTML = `${topbar(`YEONG CHOI <span class="topbar-slash">/</span> ${number(index)} — ${card.label.toUpperCase()}`)}<div class="detail-body"><header class="personal-hero"><div class="section-eyebrow">${icon(card.symbol)}<span>${card.eyebrow}</span></div><h1 id="dialog-title">${card.label}</h1><h2>${card.subtitle}</h2><p>${card.description}</p>${tagList(card.meta)}</header><section class="personal-section" aria-label="${escape(card.label)} records">${sectionContents(card.id)}</section><nav class="personal-next" aria-label="Browse sections"><button data-open="${(index + 5) % 6}"><span>← PREVIOUS</span><strong>${cards[(index + 5) % 6].label}</strong></button><button data-action="close"><span>BACK TO</span><strong>The archive</strong></button><button data-open="${(index + 1) % 6}"><span>NEXT →</span><strong>${cards[(index + 1) % 6].label}</strong></button></nav><footer class="detail-signoff">YEONG CHOI <span>RESEARCH & CTF</span></footer></div>`;
+  dialog.innerHTML = renderDetailPage(index);
   openDialog('card', trigger);
 }
 
